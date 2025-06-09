@@ -1,4 +1,6 @@
 package br.com.devance.fonar.models;
+import br.com.devance.fonar.enums.Cargo;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
