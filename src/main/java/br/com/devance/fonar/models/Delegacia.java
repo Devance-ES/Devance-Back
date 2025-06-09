@@ -69,4 +69,16 @@ public class Delegacia {
     public void setResponsavel(List<Delegado> responsavel) {
         this.responsavel = responsavel;
     }
+
+
+    public void adicionarDelegado(Delegado delegado) {
+
+
+    }
+
+    public void  removerDelegado(Delegado delegado) {
+
+
+    }
+
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class FuncionarioSecundario extends Usuario{
 
     private LocalDate dataCadastro;
-    private CargoEnum cargo;
+    private Cargo cargo;
 
     public FuncionarioSecundario() {
     }
@@ -23,11 +23,18 @@ public class FuncionarioSecundario extends Usuario{
         this.dataCadastro = dataCadastro;
     }
 
-    public CargoEnum getCargo() {
+    public Cargo getCargo() {
         return cargo;
     }
 
-    public void setCargo(CargoEnum cargo) {
+    public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
+
+
+    public void registrarFonar(){}
+
+    public void acessarHistorico(){}
+
+    public void uploadFonar(){}
 }

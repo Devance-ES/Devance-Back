@@ -30,4 +30,13 @@ public class Delegado extends Usuario{
     public void setDelegacia(Delegacia delegacia) {
         this.delegacia = delegacia;
     }
+
+    public void registrarFonar(){}
+
+    public void acessarHistorico(){}
+
+    public void enviarFonar(){}
+
+
+
 }

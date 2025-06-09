@@ -10,4 +10,18 @@ public class SuperAdministrador extends Usuario{
         super (nome,cpf,email, senha, nascimento);
     }
 
+    public void cadastrarDelegacia(Delegacia delegacia) {
+
+
+    }
+
+    public void removerDelegacia(Delegacia delegacia) {
+
+
+    }
+
+    public void alterarStatusDelegacia(Delegacia delegacia) {
+
+
+    }
 }
