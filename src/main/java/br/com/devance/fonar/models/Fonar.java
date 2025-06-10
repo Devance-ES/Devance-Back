@@ -1,5 +1,7 @@
 package br.com.devance.fonar.models;
 
+import br.com.devance.fonar.enums.Status;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -10,6 +12,7 @@ public class Fonar {
     private LocalDate dataRegistro;
     private String responsavel;
 
+
     private IdentificacaoPartesFONAR identificacaoPartes; // Bloco de identificação das partes (vítima/agressor)
     private HistoricoViolenciaFONAR blocoI_HistoricoViolencia; // Bloco I: Histórico de Violência
     private SobreAgressorFONAR blocoII_SobreAgressor; // Bloco II: Informações sobre o Agressor
@@ -17,6 +20,10 @@ public class Fonar {
     private OutrasInformacoesFONAR blocoIV_OutrasInformacoes; // Bloco IV: Outras informações relevantes
     private PreenchimentoProfissionalFONAR preenchimentoProfissional; // Bloco de preenchimento feito pelo profissional
     private String grauDeRiscoCalculado;
+
+    private Enum<Status> statusTriagem; // Status atual da triagem (String ou Enum)
+    private String caminhoImagemOriginal; // Caminho para imagem de FONARs físicos
+
 
     public Fonar(UUID idFonar, Delegacia delegacia, LocalDate dataRegistro, String responsavel,
                  IdentificacaoPartesFONAR identificacaoPartes, HistoricoViolenciaFONAR blocoI_HistoricoViolencia,
@@ -124,4 +131,24 @@ public class Fonar {
     public void setGrauDeRiscoCalculado(String grauDeRiscoCalculado) {
         this.grauDeRiscoCalculado = grauDeRiscoCalculado;
     }
+
+
+    public Enum<Status> getStatusTriagem()
+    {
+        return statusTriagem;
+    }
+
+    public void setStatusTriagem(Enum<Status> statusTriagem) {
+        this.statusTriagem = statusTriagem;
+    }
+
+    public String getCaminhoImagemOriginal() {
+        return caminhoImagemOriginal;
+    }
+
+    public void setCaminhoImagemOriginal(String caminhoImagemOriginal) {
+        this.caminhoImagemOriginal = caminhoImagemOriginal;
+    }
+
+
 }
