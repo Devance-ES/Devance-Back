@@ -2,9 +2,11 @@ package br.com.devance.fonar.servicos;
 
 import br.com.devance.fonar.excecoes.ExcecaoRecursoNaoEncontrado;
 import br.com.devance.fonar.enums.Status; // Enum para status da tarefa
+import br.com.devance.fonar.models.Delegacia;
 import br.com.devance.fonar.models.Fonar;
 import br.com.devance.fonar.models.TarefaTriagem;
 
+import br.com.devance.fonar.repositorios.RepositorioDelegacia;
 import br.com.devance.fonar.repositorios.RepositorioTarefaTriagem;
 import br.com.devance.fonar.repositorios.RepositorioFonar; // Para buscar o FONAR associado
 
@@ -27,6 +29,8 @@ public class ServicoGerenciamentoTarefas {
 
     @Autowired
     private RepositorioFonar repositorioFonar; // Necessário para criar Tarefa a partir de um Fonar
+    @Autowired
+    private RepositorioDelegacia repositorioDelegacia;
 
 
     // UC17/UC26 - Obter Dados para Painel Kanban da Delegacia
@@ -39,12 +43,12 @@ public class ServicoGerenciamentoTarefas {
 
     // Método para criar uma nova tarefa de triagem (chamado por ServicoFonar)
     @Transactional
-    public TarefaTriagem criarNovaTarefaTriagem(UUID idFonar, String grauRiscoFonar, Long idDelegacia, Long idUsuarioCriador) {
+    public TarefaTriagem criarNovaTarefaTriagem(UUID idFonar, String grauRiscoFonar, String CNPJDelegacia, Long idUsuarioCriador) {
         Fonar fonar = repositorioFonar.findById(idFonar)
                 .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("FONAR não encontrado com ID: " + idFonar));
 
-        // Assumir que a Delegacia objeto pode ser recuperada via idDelegacia ou fonar.getDelegacia()
-        // Delegacia delegacia = repositorioDelegacia.findById(idDelegacia).orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Delegacia não encontrada."));
+
+        Delegacia delegacia = repositorioDelegacia.findByCnpj(CNPJDelegacia).orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Delegacia não encontrada."));
 
         TarefaTriagem novaTarefa = new TarefaTriagem();
         novaTarefa.setFonar(fonar);
@@ -52,6 +56,7 @@ public class ServicoGerenciamentoTarefas {
         novaTarefa.setDataCriacao(LocalDateTime.now());
         novaTarefa.setStatus(Status.CRIADA); // Status inicial da tarefa
         novaTarefa.setObservacoes("Tarefa criada automaticamente para triagem do FONAR.");// Assumindo PrioridadeTarefa como atributo
+        novaTarefa.setDelegacia(delegacia);
 
         TarefaTriagem tarefaSalva = repositorioTarefaTriagem.save(novaTarefa);
 
