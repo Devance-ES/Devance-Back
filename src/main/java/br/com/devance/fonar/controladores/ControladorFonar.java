@@ -36,4 +36,21 @@ public class ControladorFonar {
         Fonar detalhesFonar = servicoFonar.obterDetalhesFonarVitima(idFonar, cpf);
         return ResponseEntity.ok(detalhesFonar);
     }
+
+    //mostrar todos os fonars
+    @GetMapping("/todos")
+    public String mostrarFonar(){
+        return "fonar mostrado";
+    }
+    //criar fonar
+    @PostMapping("/criar")
+    public String adcionarFonar(){
+        return "fonar criado";
+    }
+
+    //deletar fonar
+    @DeleteMapping("/deletar")
+    public String deletarFonar(){
+        return "fonar deletado";
+    }
 }

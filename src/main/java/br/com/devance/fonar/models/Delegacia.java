@@ -1,15 +1,36 @@
 package br.com.devance.fonar.models;
+import jakarta.persistence.Entity;
+import org.springframework.boot.context.properties.bind.Name;
+import jakarta.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
-public class Delegacia {
+import java.util.UUID;
 
+@Entity
+@Table(name="tabela_delegacia")
+public class Delegacia {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="idDelegacia")
+    private Long idDelegacia;
+
+    @Column(name="Nome_Delegacia")
     private String nome;
+    @Column(name="CNPJ",unique=true)
     private String cnpj;
+    @Column(name="Endereço")
     private String endereço;
     private String senha;
+    @Column(name="Contato_Delegacia")
     private String informacaoContato;
+    @Column(name="Delegado_Responsável")
     private List<Delegado> responsavel;
 
+    //uma delegacia tem vários Fonars
+    @OneToMany(mappedBy = "delegacia")//chave que liga fonar e delegacia
+    private List<Fonar> fonar;
+
+    //construtores
     public Delegacia() {
     }
 
@@ -80,5 +101,14 @@ public class Delegacia {
 
 
     }
+
+    public Long getIdDelegacia() {
+        return idDelegacia;
+    }
+
+    public void setIdDelegacia(Long idDelegacia) {
+        this.idDelegacia = idDelegacia;
+    }
+
 
 }

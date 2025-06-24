@@ -1,6 +1,7 @@
 package br.com.devance.fonar.models;
 import java.time.LocalDateTime;
 
+
 public abstract class Usuario
 
 {

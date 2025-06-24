@@ -1,15 +1,29 @@
 package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.Status;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
+@Entity
+@Table(name="tabela_fonar")
 public class Fonar {
-
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="idFonar")
     private UUID idFonar;
+
+    @ManyToOne //um Fonar tem uma única delegacia
+    @JoinColumn(name="delegacia_id")//chave estrangeira
     private Delegacia delegacia;
+
+    @ManyToOne
+    @JoinColumn(name="vitimaID")//chave estrangeira
+    private Vitima vitima;
+
+    @Column(name="data")
     private LocalDate dataRegistro;
+    @Column(name="responsavel")
     private String responsavel;
 
 

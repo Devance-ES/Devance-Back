@@ -1,12 +1,30 @@
 package br.com.devance.fonar.models;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
+@Table(name="tabela_vitimas")
 public class Vitima {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name="IDvitima")
+    private Long idVitima;
 
+    @Column(name="Nome_Vitima")
     private String nome;
+
+    @Column(name="Data_Nascimento")
     private LocalDateTime dataNascimento;
+    @Column(name="Contato_vitima")
     private String numeroContato;
+    @Column(name="email",unique=true)
     private String email;
+
+
+    @OneToMany(mappedBy = "vitima")
+    private List<Fonar> fonar;
 
     public Vitima() {
     }
@@ -50,4 +68,11 @@ public class Vitima {
         this.email = email;
     }
 
+    public Long getIdVitima() {
+        return idVitima;
+    }
+
+    public void setIdVitima(Long idVitima) {
+        this.idVitima = idVitima;
+    }
 }
