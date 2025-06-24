@@ -1,12 +1,20 @@
 package br.com.devance.fonar.models;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuperAdministrador extends Usuario{
 
+@Entity
+@Table(name="tabela_adm")
+public class SuperAdministrador extends Usuario{
+    @Column(name="contato-adm")
     private String contato;
+
+    //ver se recebe @OneToMany
     private List<Delegacia> responsavelPor;
 
     public SuperAdministrador() {

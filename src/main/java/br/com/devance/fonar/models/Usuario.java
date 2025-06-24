@@ -1,14 +1,28 @@
 package br.com.devance.fonar.models;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.*;
+import jakarta.persistence.InheritanceType;
 import java.time.LocalDateTime;
 
-
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Usuario
-
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="idUsuario")
+    private Long id;
+
+    @Column (name="nome_Usuario")
     private String nome;
+
+    @Column (name="CPF",unique=true)
     private String cpf;
+    @Column (name="email",unique=true)
     private String email;
     private String senha;
+    @Column (name="Data_Nascimento")
     private LocalDateTime dataNascimento;
 
     public Usuario() {

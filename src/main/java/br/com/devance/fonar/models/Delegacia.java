@@ -23,7 +23,9 @@ public class Delegacia {
     private String senha;
     @Column(name="Contato_Delegacia")
     private String informacaoContato;
+
     @Column(name="Delegado_Responsável")
+    @OneToMany(mappedBy = "delegacia")
     private List<Delegado> responsavel;
 
     //uma delegacia tem vários Fonars
