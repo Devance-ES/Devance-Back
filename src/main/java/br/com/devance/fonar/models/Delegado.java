@@ -5,8 +5,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="tabela_delegados")
+
 public class Delegado extends Usuario{
 
     private LocalDate dataCadastro;
