@@ -2,27 +2,71 @@ package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.Status;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Entity
+@Table(name = "fonars")
 public class Fonar {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idFonar;
+
+    @ManyToOne
+    @JoinColumn(name = "delegacia_id", nullable = false)
     private Delegacia delegacia;
+
+    @Column(name = "data_registro", nullable = false)
     private LocalDate dataRegistro;
+
+    @Column(name = "responsavel_registro", length = 255)
     private String responsavel;
 
+    @Embedded
+    private IdentificacaoPartesFONAR identificacaoPartes;
 
-    private IdentificacaoPartesFONAR identificacaoPartes; // Bloco de identificação das partes (vítima/agressor)
-    private HistoricoViolenciaFONAR blocoI_HistoricoViolencia; // Bloco I: Histórico de Violência
-    private SobreAgressorFONAR blocoII_SobreAgressor; // Bloco II: Informações sobre o Agressor
-    private SobreVitimaFONAR blocoIII_SobreVitima; // Bloco III: Informações sobre a Vítima (aspectos de vulnerabilidade)
-    private OutrasInformacoesFONAR blocoIV_OutrasInformacoes; // Bloco IV: Outras informações relevantes
-    private PreenchimentoProfissionalFONAR preenchimentoProfissional; // Bloco de preenchimento feito pelo profissional
+    @Embedded
+    private HistoricoViolenciaFONAR blocoI_HistoricoViolencia;
+
+    @Embedded
+    private SobreAgressorFONAR blocoII_SobreAgressor;
+
+    @Embedded
+    private SobreVitimaFONAR blocoIII_SobreVitima;
+
+    @Embedded
+    private OutrasInformacoesFONAR blocoIV_OutrasInformacoes;
+
+    @Embedded
+    private PreenchimentoProfissionalFONAR preenchimentoProfissional;
+
+    @Column(name = "grau_risco_calculado", length = 50)
     private String grauDeRiscoCalculado;
 
-    private Enum<Status> statusTriagem; // Status atual da triagem (String ou Enum)
-    private String caminhoImagemOriginal; // Caminho para imagem de FONARs físicos
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status_triagem", nullable = false, length = 50)
+    private Status statusTriagem;
+
+    @Column(name = "caminho_imagem_original", length = 500)
+    private String caminhoImagemOriginal;
+
+
+    public Fonar() {
+        this.idFonar = UUID.randomUUID();
+        this.dataRegistro = LocalDate.now();
+    }
 
 
     public Fonar(UUID idFonar, Delegacia delegacia, LocalDate dataRegistro, String responsavel,
@@ -132,14 +176,13 @@ public class Fonar {
         this.grauDeRiscoCalculado = grauDeRiscoCalculado;
     }
 
-
     public Enum<Status> getStatusTriagem()
     {
         return statusTriagem;
     }
 
     public void setStatusTriagem(Enum<Status> statusTriagem) {
-        this.statusTriagem = statusTriagem;
+        this.statusTriagem = (Status) statusTriagem;
     }
 
     public String getCaminhoImagemOriginal() {

@@ -1,12 +1,28 @@
 package br.com.devance.fonar.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class PreenchimentoProfissionalFONAR {
 
+    @Column(name = "preenchimento_sem_ajuda")
     private boolean preenchimentoSemAjuda;
+
+    @Column(name = "preenchimento_com_ajuda")
     private boolean preenchimentoComAjuda;
+
+    @Column(name = "vitima_sem_condicoes_responder")
     private boolean vitimaSemCondicoesResponder;
+
+    @Column(name = "vitima_recusou_responder")
     private boolean vitimaRecusouResponder;
+
+    @Column(name = "terceiro_comunicante_preencheu")
     private boolean terceiroComunicantePreencheu;
+
+    public PreenchimentoProfissionalFONAR() {
+    }
 
     public PreenchimentoProfissionalFONAR(boolean preenchimentoSemAjuda, boolean preenchimentoComAjuda, boolean vitimaSemCondicoesResponder,
                                           boolean vitimaRecusouResponder, boolean terceiroComunicantePreencheu) {

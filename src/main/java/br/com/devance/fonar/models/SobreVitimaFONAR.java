@@ -3,42 +3,69 @@ package br.com.devance.fonar.models;
 import br.com.devance.fonar.enums.CorRaca;
 import br.com.devance.fonar.enums.FaixaEtariaFilhos;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import java.util.List;
 
+@Embeddable
 public class SobreVitimaFONAR
 {
-    // 1. Informações sobre Filhos
+    @Column(name = "vitima_tem_filhos_com_agressor")
     private boolean temFilhosComAgressor;
 
-    private int qtdFilhos; // Quantidade total de filhos (com ou sem agressor)
+    @Column(name = "vitima_qtd_filhos")
+    private int qtdFilhos;
 
-    private boolean filhoForaRel; // Se tem filhos de outros relacionamentos
+    @Column(name = "vitima_filho_fora_rel")
+    private boolean filhoForaRel;
 
-    private int qtdFilhosFora; // Quantidade de filhos de outros relacionamentos
+    @Column(name = "vitima_qtd_filhos_fora")
+    private int qtdFilhosFora;
 
+    @Column(name = "vitima_nao_tem_filhos")
     private boolean naoTemFilhos;
 
+    @ElementCollection
+    @CollectionTable(name = "fonars_vitima_faixa_etaria_filhos", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "faixa_etaria")
+    @Enumerated(EnumType.STRING)
     private List<FaixaEtariaFilhos> faixaEtariaFilhos;
 
+    @Column(name = "vitima_tem_filhos_deficientes")
     private boolean temFilhosDeficientes;
 
+    @Column(name = "vitima_qtd_filhos_deficiencia")
     private int qtdFilhosDeficiencia;
 
+    @Column(name = "vitima_conflito_de_guarda")
     private boolean conflitoDeGuarda;
 
+    @Column(name = "vitima_filhos_viram_violencia")
     private boolean filhosViramViolencia;
 
-    // 2. Condição da Vítima (Violência em contextos específicos)
-    private boolean violenciaGravidezPosParto; // Violência ocorrida durante gravidez ou pós-parto
+    @Column(name = "vitima_violencia_gravidez_pos_parto")
+    private boolean violenciaGravidezPosParto;
 
-    private boolean novoRelAumentaViolencia; // Se o novo relacionamento da vítima aumentou a violência
+    @Column(name = "vitima_novo_rel_aumenta_violencia")
+    private boolean novoRelAumentaViolencia;
 
-    // 3. Condição Física e Demográfica da Vítima
-    private boolean possuiDeficiencia; // Se a própria vítima possui deficiência
+    @Column(name = "vitima_possui_deficiencia")
+    private boolean possuiDeficiencia;
 
-    private String qualDeficiencia; // Descrição da deficiência, se houver
+    @Column(name = "vitima_qual_deficiencia", length = 255)
+    private String qualDeficiencia;
 
+    @Column(name = "vitima_cor_raca")
+    @Enumerated(EnumType.STRING)
     private CorRaca corRaca;
+
+    public SobreVitimaFONAR() {
+    }
 
     public SobreVitimaFONAR(boolean temFilhosComAgressor, int qtdFilhos, boolean filhoForaRel, int qtdFilhosFora,
                             boolean naoTemFilhos, List<FaixaEtariaFilhos> faixaEtariaFilhos,

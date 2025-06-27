@@ -1,13 +1,31 @@
 package br.com.devance.fonar.models;
+
 import br.com.devance.fonar.enums.Cargo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@DiscriminatorValue("FUNCIONARIO_SECUNDARIO")
 public class FuncionarioSecundario extends Usuario{
 
+    @Column(name = "data_cadastro_funcionario_sec")
     private LocalDate dataCadastro;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cargo_funcionario", length = 50)
     private Cargo cargo;
+
+    @ManyToOne
+    @JoinColumn(name = "delegacia_id", nullable = false)
+    private Delegacia delegacia;
 
     public FuncionarioSecundario() {
     }
@@ -33,6 +51,13 @@ public class FuncionarioSecundario extends Usuario{
         this.cargo = cargo;
     }
 
+    public Delegacia getDelegacia() {
+        return delegacia;
+    }
+
+    public void setDelegacia(Delegacia delegacia) {
+        this.delegacia = delegacia;
+    }
 
     public void registrarFonar(){}
 

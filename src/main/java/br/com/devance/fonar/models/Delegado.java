@@ -1,9 +1,21 @@
 package br.com.devance.fonar.models;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@DiscriminatorValue("DELEGADO")
 public class Delegado extends Usuario{
+    @Column(name = "data_cadastro_delegado")
     private LocalDate dataCadastro;
+
+    @ManyToOne
+    @JoinColumn(name = "delegacia_id", nullable = false)
     private Delegacia delegacia;
 
     public Delegado() {
@@ -36,7 +48,4 @@ public class Delegado extends Usuario{
     public void acessarHistorico(){}
 
     public void enviarFonar(){}
-
-
-
 }

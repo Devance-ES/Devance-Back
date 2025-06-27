@@ -1,11 +1,25 @@
 package br.com.devance.fonar.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class OutrasInformacoesFONAR {
 
+    @Column(name = "mora_em_local_de_risco")
     private boolean moraEmLocalDeRisco;
+
+    @Column(name = "desconhece_mora_local_de_risco")
     private boolean desconheceMoraLocalDeRisco;
+
+    @Column(name = "dependencia_financeira_agressor")
     private boolean dependenciaFinanceiraAgressor;
+
+    @Column(name = "quer_abrigo_temporario")
     private boolean queAbrigoTemporario;
+
+    public OutrasInformacoesFONAR() {
+    }
 
     public OutrasInformacoesFONAR(boolean moraEmLocalDeRisco, boolean desconheceMoraLocalDeRisco, boolean dependenciaFinanceiraAgressor, boolean queAbrigoTemporario) {
         this.moraEmLocalDeRisco = moraEmLocalDeRisco;

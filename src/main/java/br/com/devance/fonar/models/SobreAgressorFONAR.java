@@ -1,53 +1,72 @@
 package br.com.devance.fonar.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
-public class SobreAgressorFONAR
-{
+@Embeddable
+public class SobreAgressorFONAR {
+    @Column(name = "agressor_uso_abusivo_alcool")
     private boolean usoAbusivoAlcool;
 
+    @Column(name = "agressor_uso_abusivo_drogas")
     private boolean usoAbusivoDrogas;
 
+    @Column(name = "agressor_nenhum_uso_abusivo")
     private boolean nenhumUsoAbusivo;
 
+    @Column(name = "agressor_desconhece_uso_abusivo")
     private boolean desconheceUsoAbusivo;
 
-    // 2. Saúde Mental/Condição Médica (psicológico do agressor)
+    @Column(name = "agressor_doente_medicado")
     private boolean doenteMedicado;
 
+    @Column(name = "agressor_doente_nao_medicado")
     private boolean doenteNaoMedicado;
 
+    @Column(name = "agressor_nao_e_doente")
     private boolean naoEDoente;
 
+    @Column(name = "agressor_desconhece_doenca")
     private boolean desconheceDoenca;
 
-    // 3. Histórico de Medida Protetiva
+    @Column(name = "agressor_descumpriu_medida_prot")
     private boolean descumpriuMedidaProt;
 
-    // 4. Tentativa de Suicídio (do agressor, implica em risco)
+    @Column(name = "agressor_tentou_suicidio")
     private boolean tentouSuicidio;
 
-    // 5. Situação Financeira (dependência econômica)
-    private boolean desempregadoDifiFin; // Desempregado e/ou com dificuldade financeira
+    @Column(name = "agressor_desempregado_difi_fin")
+    private boolean desempregadoDifiFin;
 
+    @Column(name = "agressor_desconhece_situ_fin")
     private boolean desconheceSituFin;
 
-    // 6. Posse de Armas (red flag)
+    @Column(name = "agressor_tem_arma_de_fogo")
     private boolean temArmaDeFogo;
 
+    @Column(name = "agressor_desconhece_arma")
     private boolean desconheceArma;
 
-    // 7. Violência contra Outros/Terceiros
+    @Column(name = "agressor_violencia_filhos")
     private boolean violenciaFilhos;
 
+    @Column(name = "agressor_violencia_familiares")
     private boolean violenciaFamiliares;
 
+    @Column(name = "agressor_violencia_outras_pessoas")
     private boolean violenciaOutrasPessoas;
 
+    @Column(name = "agressor_violencia_animais")
     private boolean violenciaAnimais;
 
-    private boolean naoViolenciaOutros; //
+    @Column(name = "agressor_nao_violencia_outros")
+    private boolean naoViolenciaOutros;
 
-    private boolean desconheceViolenciaOutros; //
+    @Column(name = "agressor_desconhece_violencia_outros")
+    private boolean desconheceViolenciaOutros;
+
+    public SobreAgressorFONAR() {
+    }
 
     public SobreAgressorFONAR(boolean usoAbusivoAlcool, boolean usoAbusivoDrogas, boolean nenhumUsoAbusivo,
                               boolean desconheceUsoAbusivo, boolean doenteMedicado, boolean doenteNaoMedicado,
@@ -55,8 +74,7 @@ public class SobreAgressorFONAR
                               boolean tentouSuicidio, boolean desempregadoDifiFin, boolean desconheceSituFin,
                               boolean temArmaDeFogo, boolean desconheceArma, boolean violenciaFilhos,
                               boolean violenciaFamiliares, boolean violenciaOutrasPessoas, boolean violenciaAnimais,
-                              boolean naoViolenciaOutros, boolean desconheceViolenciaOutros)
-    {
+                              boolean naoViolenciaOutros, boolean desconheceViolenciaOutros) {
         this.usoAbusivoAlcool = usoAbusivoAlcool;
         this.usoAbusivoDrogas = usoAbusivoDrogas;
         this.nenhumUsoAbusivo = nenhumUsoAbusivo;
@@ -78,7 +96,6 @@ public class SobreAgressorFONAR
         this.naoViolenciaOutros = naoViolenciaOutros;
         this.desconheceViolenciaOutros = desconheceViolenciaOutros;
     }
-
 
     public boolean isUsoAbusivoAlcool() {
         return usoAbusivoAlcool;
