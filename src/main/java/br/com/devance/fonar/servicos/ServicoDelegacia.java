@@ -92,9 +92,12 @@ public class ServicoDelegacia {
         Delegacia delegacia = repositorioDelegacia.findById(idDelegacia)
                 .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Delegacia não encontrada."));
 
-        Delegado novoResponsavel = (Delegado) repositorioDelegado.findById(idNovoResponsavelDelegado)
-                .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Novo delegado responsável não encontrado."));
+        Delegado novoResponsavel = repositorioDelegado.findById(idNovoResponsavelDelegado)
+                .orElseThrow();
 
+        novoResponsavel.setDelegacia(delegacia); // Vincula o novo responsável a esta delegacia
+        repositorioDelegado.save(novoResponsavel);
+        // Se houver um responsável anterior e você precisa desvinculá-lo, a lógica seria mais complexa.
 
         return repositorioDelegacia.save(delegacia);
     }
