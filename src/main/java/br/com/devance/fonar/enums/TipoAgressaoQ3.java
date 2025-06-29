@@ -9,7 +9,7 @@ public enum TipoAgressaoQ3 {
     PUXOES_DE_CABELO("Puxões de cabelo"),
     NENHUMA_DAS_AGRESSOES("Nenhuma das agressões");
 
-    private String descricao;
+    private final String descricao;
 
     TipoAgressaoQ3(String descricao) {
         this.descricao = descricao;

@@ -24,6 +24,9 @@ public class Fonar {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idFonar;
 
+    @Column
+    private String cpfVitima;
+
     @ManyToOne
     @JoinColumn(name = "delegacia_id", nullable = false)
     private Delegacia delegacia;
@@ -69,12 +72,13 @@ public class Fonar {
     }
 
 
-    public Fonar(UUID idFonar, Delegacia delegacia, LocalDate dataRegistro, String responsavel,
+    public Fonar(UUID idFonar,String cpfVitima, Delegacia delegacia, LocalDate dataRegistro, String responsavel,
                  IdentificacaoPartesFONAR identificacaoPartes, HistoricoViolenciaFONAR blocoI_HistoricoViolencia,
                  SobreAgressorFONAR blocoII_SobreAgressor, SobreVitimaFONAR blocoIII_SobreVitima,
                  OutrasInformacoesFONAR blocoIV_OutrasInformacoes, PreenchimentoProfissionalFONAR preenchimentoProfissional,
                  String grauDeRiscoCalculado)
     {
+        this.cpfVitima = cpfVitima;
         this.idFonar = idFonar;
         this.delegacia = delegacia;
         this.dataRegistro = dataRegistro;
@@ -87,6 +91,9 @@ public class Fonar {
         this.preenchimentoProfissional = preenchimentoProfissional;
         this.grauDeRiscoCalculado = grauDeRiscoCalculado;
     }
+
+
+
 
     public UUID getIdFonar() {
         return idFonar;
@@ -191,6 +198,14 @@ public class Fonar {
 
     public void setCaminhoImagemOriginal(String caminhoImagemOriginal) {
         this.caminhoImagemOriginal = caminhoImagemOriginal;
+    }
+
+    public String getCpfVitima(){
+        return cpfVitima;
+    }
+
+    public String setCpfVitima(String cpfVitima){
+        return this.cpfVitima = cpfVitima;
     }
 
 

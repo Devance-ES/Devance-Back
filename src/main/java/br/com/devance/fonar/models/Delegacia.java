@@ -1,5 +1,6 @@
 package br.com.devance.fonar.models;
 
+import br.com.devance.fonar.enums.StatusDelegacia;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -35,6 +36,9 @@ public class Delegacia {
     @JoinColumn(name = "super_administrador_gerenciador_id") // Coluna FK na tabela Delegacias
     private SuperAdministrador superAdministradorGerenciador;
 
+    @Column
+    private StatusDelegacia statusDelegacia;
+
 
 
     public Delegacia() {
@@ -50,7 +54,7 @@ public class Delegacia {
     }
 
     public Delegacia(Long id, String nome, String cnpj, String endereço, String senha, String informacaoContato,
-                     List<Delegado> responsavel, SuperAdministrador superAdministradorGerenciador) {
+                     List<Delegado> responsavel, SuperAdministrador superAdministradorGerenciador, StatusDelegacia statusDelegacia) {
         this.id = id;
         this.nome = nome;
         this.cnpj = cnpj;
@@ -59,7 +63,10 @@ public class Delegacia {
         this.informacaoContato = informacaoContato;
         this.responsavel = responsavel;
         this.superAdministradorGerenciador = superAdministradorGerenciador;
+        this.statusDelegacia = statusDelegacia;
     }
+
+
 
     public Long getId() {
         return id;
@@ -124,6 +131,15 @@ public class Delegacia {
     public void setSuperAdministradorGerenciador(SuperAdministrador superAdministradorGerenciador) {
         this.superAdministradorGerenciador = superAdministradorGerenciador;
     }
+
+    public StatusDelegacia getStatus() {
+        return statusDelegacia;
+    }
+
+    public void setStatus(StatusDelegacia statusDelegacia) {
+        this.statusDelegacia = statusDelegacia;
+    }
+
 
     public void adicionarDelegado(Delegado delegado) {
 

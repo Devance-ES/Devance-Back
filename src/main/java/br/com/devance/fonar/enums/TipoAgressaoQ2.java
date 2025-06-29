@@ -11,7 +11,7 @@ public enum TipoAgressaoQ2 {
     PAULADA("Paulada"),
     NENHUMA_DAS_AGRESSOES("Nenhuma das agressões");
 
-    private String descricao;
+    private final String descricao;
 
     TipoAgressaoQ2(String descricao) {
         this.descricao = descricao;

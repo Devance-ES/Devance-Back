@@ -3,6 +3,7 @@ package br.com.devance.fonar.models;
 import br.com.devance.fonar.enums.CorRaca;
 import br.com.devance.fonar.enums.FaixaEtariaFilhos;
 
+import br.com.devance.fonar.enums.SituacaoFilhos;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -10,25 +11,32 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Embeddable
-public class SobreVitimaFONAR
-{
-    @Column(name = "vitima_tem_filhos_com_agressor")
-    private boolean temFilhosComAgressor;
+public class SobreVitimaFONAR {
 
-    @Column(name = "vitima_qtd_filhos")
-    private int qtdFilhos;
+    @Column(name = "vitima_tentou_separar")
+    private Boolean tentouSeparar;
 
-    @Column(name = "vitima_filho_fora_rel")
-    private boolean filhoForaRel;
+    @Column(name = "vitima_situacao_filhos")
+    @Enumerated(EnumType.STRING)
+    private SituacaoFilhos situacaoFilhos;
 
-    @Column(name = "vitima_qtd_filhos_fora")
-    private int qtdFilhosFora;
+    @Column(name = "vitima_qtd_filhos_com_agressor")
+    private Integer qtdFilhosComAgressor;
 
-    @Column(name = "vitima_nao_tem_filhos")
-    private boolean naoTemFilhos;
+    @Column(name = "vitima_qtd_filhos_de_outro_relacionamento")
+    private Integer qtdFilhosDeOutroRelacionamento;
 
     @ElementCollection
     @CollectionTable(name = "fonars_vitima_faixa_etaria_filhos", joinColumns = @JoinColumn(name = "fonar_id"))
@@ -41,6 +49,7 @@ public class SobreVitimaFONAR
 
     @Column(name = "vitima_qtd_filhos_deficiencia")
     private int qtdFilhosDeficiencia;
+
 
     @Column(name = "vitima_conflito_de_guarda")
     private boolean conflitoDeGuarda;
@@ -63,151 +72,4 @@ public class SobreVitimaFONAR
     @Column(name = "vitima_cor_raca")
     @Enumerated(EnumType.STRING)
     private CorRaca corRaca;
-
-    public SobreVitimaFONAR() {
-    }
-
-    public SobreVitimaFONAR(boolean temFilhosComAgressor, int qtdFilhos, boolean filhoForaRel, int qtdFilhosFora,
-                            boolean naoTemFilhos, List<FaixaEtariaFilhos> faixaEtariaFilhos,
-                            boolean temFilhosDeficientes, int qtdFilhosDeficiencia, boolean conflitoDeGuarda,
-                            boolean filhosViramViolencia, boolean violenciaGravidezPosParto,
-                            boolean novoRelAumentaViolencia, boolean possuiDeficiencia, String qualDeficiencia,
-                            CorRaca corRaca)
-    {
-        this.temFilhosComAgressor = temFilhosComAgressor;
-        this.qtdFilhos = qtdFilhos;
-        this.filhoForaRel = filhoForaRel;
-        this.qtdFilhosFora = qtdFilhosFora;
-        this.naoTemFilhos = naoTemFilhos;
-        this.faixaEtariaFilhos = faixaEtariaFilhos;
-        this.temFilhosDeficientes = temFilhosDeficientes;
-        this.qtdFilhosDeficiencia = qtdFilhosDeficiencia;
-        this.conflitoDeGuarda = conflitoDeGuarda;
-        this.filhosViramViolencia = filhosViramViolencia;
-        this.violenciaGravidezPosParto = violenciaGravidezPosParto;
-        this.novoRelAumentaViolencia = novoRelAumentaViolencia;
-        this.possuiDeficiencia = possuiDeficiencia;
-        this.qualDeficiencia = qualDeficiencia;
-        this.corRaca = corRaca;
-    }
-
-    public boolean isTemFilhosComAgressor() {
-        return temFilhosComAgressor;
-    }
-
-    public void setTemFilhosComAgressor(boolean temFilhosComAgressor) {
-        this.temFilhosComAgressor = temFilhosComAgressor;
-    }
-
-    public int getQtdFilhos() {
-        return qtdFilhos;
-    }
-
-    public void setQtdFilhos(int qtdFilhos) {
-        this.qtdFilhos = qtdFilhos;
-    }
-
-    public boolean isFilhoForaRel() {
-        return filhoForaRel;
-    }
-
-    public void setFilhoForaRel(boolean filhoForaRel) {
-        this.filhoForaRel = filhoForaRel;
-    }
-
-    public int getQtdFilhosFora() {
-        return qtdFilhosFora;
-    }
-
-    public void setQtdFilhosFora(int qtdFilhosFora) {
-        this.qtdFilhosFora = qtdFilhosFora;
-    }
-
-    public boolean isNaoTemFilhos() {
-        return naoTemFilhos;
-    }
-
-    public void setNaoTemFilhos(boolean naoTemFilhos) {
-        this.naoTemFilhos = naoTemFilhos;
-    }
-
-    public List<FaixaEtariaFilhos> getFaixaEtariaFilhos() {
-        return faixaEtariaFilhos;
-    }
-
-    public void setFaixaEtariaFilhos(List<FaixaEtariaFilhos> faixaEtariaFilhos) {
-        this.faixaEtariaFilhos = faixaEtariaFilhos;
-    }
-
-    public boolean isTemFilhosDeficientes() {
-        return temFilhosDeficientes;
-    }
-
-    public void setTemFilhosDeficientes(boolean temFilhosDeficientes) {
-        this.temFilhosDeficientes = temFilhosDeficientes;
-    }
-
-    public int getQtdFilhosDeficiencia() {
-        return qtdFilhosDeficiencia;
-    }
-
-    public void setQtdFilhosDeficiencia(int qtdFilhosDeficiencia) {
-        this.qtdFilhosDeficiencia = qtdFilhosDeficiencia;
-    }
-
-    public boolean isConflitoDeGuarda() {
-        return conflitoDeGuarda;
-    }
-
-    public void setConflitoDeGuarda(boolean conflitoDeGuarda) {
-        this.conflitoDeGuarda = conflitoDeGuarda;
-    }
-
-    public boolean isFilhosViramViolencia() {
-        return filhosViramViolencia;
-    }
-
-    public void setFilhosViramViolencia(boolean filhosViramViolencia) {
-        this.filhosViramViolencia = filhosViramViolencia;
-    }
-
-    public boolean isViolenciaGravidezPosParto() {
-        return violenciaGravidezPosParto;
-    }
-
-    public void setViolenciaGravidezPosParto(boolean violenciaGravidezPosParto) {
-        this.violenciaGravidezPosParto = violenciaGravidezPosParto;
-    }
-
-    public boolean isNovoRelAumentaViolencia() {
-        return novoRelAumentaViolencia;
-    }
-
-    public void setNovoRelAumentaViolencia(boolean novoRelAumentaViolencia) {
-        this.novoRelAumentaViolencia = novoRelAumentaViolencia;
-    }
-
-    public boolean isPossuiDeficiencia() {
-        return possuiDeficiencia;
-    }
-
-    public void setPossuiDeficiencia(boolean possuiDeficiencia) {
-        this.possuiDeficiencia = possuiDeficiencia;
-    }
-
-    public String getQualDeficiencia() {
-        return qualDeficiencia;
-    }
-
-    public void setQualDeficiencia(String qualDeficiencia) {
-        this.qualDeficiencia = qualDeficiencia;
-    }
-
-    public CorRaca getCorRaca() {
-        return corRaca;
-    }
-
-    public void setCorRaca(CorRaca corRaca) {
-        this.corRaca = corRaca;
-    }
 }
