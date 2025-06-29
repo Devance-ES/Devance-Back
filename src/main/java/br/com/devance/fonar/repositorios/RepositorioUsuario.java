@@ -10,6 +10,12 @@ import java.util.Optional;
 @Repository
 public interface RepositorioUsuario extends JpaRepository<Usuario, Long>, JpaSpecificationExecutor<Usuario> {
     Optional<Usuario> findByCpf(String cpf);
+
     Optional<Usuario> findByEmail(String email);
+
     boolean existsByCpf(String cpf);
+
     boolean existsByEmail(String email);
+
+    Long id(Long id);
+}

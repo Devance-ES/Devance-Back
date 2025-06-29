@@ -3,8 +3,8 @@ package br.com.devance.fonar.controladores;
 import br.com.devance.fonar.dto.DTOEntradaFonar;
 import br.com.devance.fonar.dto.DTOFiltroFonar;
 import br.com.devance.fonar.dto.DTOHistoricoFonar;
+import br.com.devance.fonar.dto.DTOSaidaFonar;
 import br.com.devance.fonar.models.Delegacia;
-import br.com.devance.fonar.models.Fonar;
 import br.com.devance.fonar.models.Usuario;
 import br.com.devance.fonar.servicos.ServicoFonar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,36 +32,33 @@ public class ControladorFonar {
     }
 
     @GetMapping("/historico/vitima/{cpf}/detalhes/{idFonar}")
-    public ResponseEntity<Fonar> obterDetalhesFonarVitima(
+    public ResponseEntity<DTOSaidaFonar> obterDetalhesFonarVitima(
             @PathVariable String cpf,
             @PathVariable UUID idFonar) {
 
-
-        Fonar detalhesFonar = servicoFonar.obterDetalhesFonarVitima(idFonar, cpf);
-        return ResponseEntity.ok(detalhesFonar);
+        DTOSaidaFonar dto = servicoFonar.obterDetalhesFonarVitima(idFonar, cpf);
+        return ResponseEntity.ok(dto);
     }
 
     // UC01, UC02, UC03: Acessar, Preencher, Revisar e Enviar o FONAR (Vítima)
     @PostMapping("/publico")
-    public ResponseEntity<Fonar> registrarFonarPublico(@RequestBody DTOEntradaFonar dtoEntradaFonar) {
-        Fonar fonarSalvo = servicoFonar.registrarFonarOnline(dtoEntradaFonar);
-        return ResponseEntity.status(HttpStatus.CREATED).body(fonarSalvo); // Retorna 201 Created
+    public ResponseEntity<DTOSaidaFonar> registrarFonarPublico(@RequestBody DTOEntradaFonar dtoEntradaFonar) {
+        DTOSaidaFonar dto = servicoFonar.registrarFonarOnline(dtoEntradaFonar);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     // UC16: Registrar Novo FONAR (para Delegados e Funcionários)
     @PostMapping("/instituicao")
-    public ResponseEntity<Fonar> registrarFonarInstituicao(
+    public ResponseEntity<DTOSaidaFonar> registrarFonarInstituicao(
             @RequestBody DTOEntradaFonar dtoEntradaFonar,
-            @RequestParam(name = "idDelegacia", required = false) Delegacia delegacia,
-            @RequestParam(name = "idUsuarioResponsavel", required = false) Usuario usuarioResponsavel) {
+            @RequestParam(name = "idDelegacia") Long idDelegacia,
+            @RequestParam(name = "idUsuarioResponsavel") Long idUsuarioResponsavel) {
 
+        // Buscar entidades delegacia e usuario (você pode passar para o service fazer isso)
+        Delegacia delegacia = servicoFonar.buscarDelegaciaPorId(idDelegacia);
+        Usuario usuarioResponsavel = servicoFonar.buscarUsuarioPorId(idUsuarioResponsavel);
 
-        // Aqui você obteria os IDs reais do usuário logado e sua delegacia, por exemplo:
-        // Long idDelegaciaAutenticada = ...; // Ex: SecurityContextHolder.getContext().getAuthentication().getPrincipal().getDelegacia().getId();
-        // Long idUsuarioLogado = ...; // Ex: SecurityContextHolder.getContext().getAuthentication().getPrincipal().getId();
-
-
-        Fonar fonarSalvo = servicoFonar.registrarNovoFonar(dtoEntradaFonar, delegacia, usuarioResponsavel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(fonarSalvo); // Retorna 201 Created
+        DTOSaidaFonar dto = servicoFonar.registrarNovoFonar(dtoEntradaFonar, delegacia, usuarioResponsavel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

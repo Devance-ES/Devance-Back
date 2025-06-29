@@ -1,6 +1,8 @@
 package br.com.devance.fonar.mappers;
 
 import br.com.devance.fonar.dto.DTOEntradaFonar;
+import br.com.devance.fonar.dto.DTOSaidaFonar;
+import br.com.devance.fonar.enums.Status;
 import br.com.devance.fonar.models.Fonar;
 
 public class FonarMapper {
@@ -42,4 +44,28 @@ public class FonarMapper {
                 .preenchimentoProfissional(PreenchimentoProfissionalMapper.toDTO(entity.getPreenchimentoProfissional()))
                 .build();
     }
+
+    public static DTOSaidaFonar toResponseDTO(Fonar entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        return DTOSaidaFonar.builder()
+                .idFonar(entity.getIdFonar())
+                .cpfVitima(entity.getCpfVitima())
+                .nomeDelegacia(entity.getDelegacia().getNome())
+                .dataRegistro(entity.getDataRegistro())
+                .responsavel(entity.getResponsavel())
+                .grauDeRiscoCalculado(entity.getGrauDeRiscoCalculado())
+                .statusTriagem((Status) entity.getStatusTriagem())
+                .build();
+    }
+
+
+
+
+
+
+
+
 }
