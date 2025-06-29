@@ -32,6 +32,12 @@ public class Delegacia {
     @OneToMany(mappedBy = "delegacia")
     private List<Delegado> responsavel;
 
+    @Column(name = "status")
+    private StatusDelegacia status;
+
+    @Column(name = "tipo")
+    private String tipo;
+
     @ManyToOne // Uma Delegacia é gerenciada por UM SuperAdministrador
     @JoinColumn(name = "super_administrador_gerenciador_id") // Coluna FK na tabela Delegacias
     private SuperAdministrador superAdministradorGerenciador;
@@ -66,7 +72,37 @@ public class Delegacia {
         this.statusDelegacia = statusDelegacia;
     }
 
+    public Delegacia(Long id, String nome, String cnpj, String endereço, String senha, String informacaoContato,
+                     List<Delegado> responsavel, StatusDelegacia status, String tipo, SuperAdministrador superAdministradorGerenciador
+            , StatusDelegacia statusDelegacia) {
+        this.id = id;
+        this.nome = nome;
+        this.cnpj = cnpj;
+        this.endereço = endereço;
+        this.senha = senha;
+        this.informacaoContato = informacaoContato;
+        this.responsavel = responsavel;
+        this.status = status;
+        this.tipo = tipo;
+        this.superAdministradorGerenciador = superAdministradorGerenciador;
+        this.statusDelegacia = statusDelegacia;
+    }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public StatusDelegacia getStatusDelegacia() {
+        return statusDelegacia;
+    }
+
+    public void setStatusDelegacia(StatusDelegacia statusDelegacia) {
+        this.statusDelegacia = statusDelegacia;
+    }
 
     public Long getId() {
         return id;

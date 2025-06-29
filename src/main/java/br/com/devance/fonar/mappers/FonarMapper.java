@@ -60,12 +60,4 @@ public class FonarMapper {
                 .statusTriagem((Status) entity.getStatusTriagem())
                 .build();
     }
-
-
-
-
-
-
-
-
 }

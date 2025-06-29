@@ -9,6 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -27,12 +29,25 @@ public class FuncionarioSecundario extends Usuario{
     @JoinColumn(name = "delegacia_id", nullable = false)
     private Delegacia delegacia;
 
+    @Column (name = "ativo")
+    private boolean ativo;
+
     public FuncionarioSecundario() {
     }
 
     public FuncionarioSecundario(String nome, String cpf, String email, String senha, LocalDateTime nascimento, LocalDate data){
         super (nome,cpf,email, senha,nascimento);
         this.dataCadastro = data;
+    }
+
+
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public LocalDate getDataCadastro() {
