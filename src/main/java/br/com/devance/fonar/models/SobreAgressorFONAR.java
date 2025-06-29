@@ -17,9 +17,6 @@ import java.util.Set;
 @Setter
 public class SobreAgressorFONAR {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "uso_abusivo")

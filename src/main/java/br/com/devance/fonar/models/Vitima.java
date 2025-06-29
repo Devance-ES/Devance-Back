@@ -17,6 +17,9 @@ public class Vitima {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 11)
+    private String cpf;
+
     @Column(nullable = false, length = 255)
     private String nome;
 
@@ -32,12 +35,17 @@ public class Vitima {
     public Vitima() {
     }
 
-    public Vitima(String nome, LocalDateTime nascimento,String contato,String email){
+    public Vitima(String cpf, String nome, LocalDateTime nascimento,String contato,String email){
+        this.cpf = cpf;
         this.nome = nome;
         this.dataNascimento =nascimento.toLocalDate(); // Converte LocalDateTime para LocalDate no construtor
         this.numeroContato = contato;
         this.email = email;
     }
+
+    public String getCpf() {return cpf;}
+
+    public void setCpf(String cpf) {this.cpf = cpf;}
 
     public String getNome() {
         return nome;
