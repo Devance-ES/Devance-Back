@@ -82,6 +82,7 @@ public class Fonar {
     @Embedded
     private PreenchimentoProfissionalFONAR preenchimentoProfissional;
 
+    @Setter
     @Getter
     @Column(name = "grau_risco_calculado", length = 50)
     private String grauDeRiscoCalculado;
@@ -99,10 +100,6 @@ public class Fonar {
     public Fonar() {
         this.idFonar = UUID.randomUUID();
         this.dataRegistro = LocalDate.now();
-    }
-
-    public void setGrauDeRiscoCalculado(String grauDeRiscoCalculado) {
-        this.grauDeRiscoCalculado = grauDeRiscoCalculado;
     }
 
     public Enum<Status> getStatusTriagem()
