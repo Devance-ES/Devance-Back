@@ -13,6 +13,5 @@ Este projeto visa digitalizar o Formulário Nacional de Avaliação de Risco par
 * **Antônio Chaves Patriota**
 * **João Pedro Oliveira da Silva**
 * **Juarez Damião Lopes Filho** 
-* **Luiz Felipe Pereira da Silva**
 * **Mateus Abdias dos Santos Silva**
 * **Rony Elias de Oliveira**
