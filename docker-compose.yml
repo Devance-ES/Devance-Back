@@ -12,8 +12,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password # Senha do usuário 'root' do MySQL. Mude para uma senha forte em produção!
       MYSQL_DATABASE: fonar_db # Nome do banco de dados que será criado automaticamente ao iniciar o container.
-      MYSQL_USER: devance # <--- ALTERADO: Usuário para sua aplicação
-      MYSQL_PASSWORD: dev123 # <--- ALTERADO: Senha para o usuário da aplicação
+      MYSQL_USER: fonar_user # <--- ALTERADO: Usuário para sua aplicação
+      MYSQL_PASSWORD: fonar_password # <--- ALTERADO: Senha para o usuário da aplicação
 
     # Mapeamento de portas: "HOST_PORT:CONTAINER_PORT".
     # Isso expõe a porta 3306 do container MySQL para a porta 3306 da sua máquina host.
@@ -54,8 +54,8 @@ services:
     environment:
       # URL de conexão corrigida, incluindo 'allowPublicKeyRetrieval=True'
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fonar_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=True
-      SPRING_DATASOURCE_USERNAME: devance # <--- ALTERADO: Deve corresponder a MYSQL_USER em 'db'
-      SPRING_DATASOURCE_PASSWORD: dev123 # <--- ALTERADO: Deve corresponder a MYSQL_PASSWORD em 'db'
+      SPRING_DATASOURCE_USERNAME: fonar_user # <--- ALTERADO: Deve corresponder a MYSQL_USER em 'db'
+      SPRING_DATASOURCE_PASSWORD: fonar_password # <--- ALTERADO: Deve corresponder a MYSQL_PASSWORD em 'db'
       # spring.devtools.restart.enabled: false
       # logging.level.org.springframework: DEBUG
       # logging.level.org.hibernate: DEBUG
