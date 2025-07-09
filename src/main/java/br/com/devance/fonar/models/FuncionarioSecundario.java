@@ -11,10 +11,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @DiscriminatorValue("FUNCIONARIO_SECUNDARIO")
 public class FuncionarioSecundario extends Usuario{
@@ -61,43 +65,4 @@ public class FuncionarioSecundario extends Usuario{
         this.perfil = perfil;
     }
 
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public LocalDate getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDate dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
-    public Cargo getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
-    }
-
-    public Delegacia getDelegacia() {
-        return delegacia;
-    }
-
-    public void setDelegacia(Delegacia delegacia) {
-        this.delegacia = delegacia;
-    }
-
-    public PerfilUsuario getPerfil() {
-        return perfil;
-    }
-
-    public setPerfil(PerfilUsuario perfil) {
-        this.perfil = perfil;
-    }
 }

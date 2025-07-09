@@ -6,9 +6,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @DiscriminatorValue("DELEGADO")
 public class Delegado extends Usuario{
@@ -50,43 +55,4 @@ public class Delegado extends Usuario{
         this.perfil = perfil;
     }
 
-    public LocalDate getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDate dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
-    public Delegacia getDelegacia() {
-        return delegacia;
-    }
-
-    public void setDelegacia(Delegacia delegacia) {
-        this.delegacia = delegacia;
-    }
-
-    public String getDelegadoContato() {
-        return delegadoContato;
-    }
-
-    public void setDelegadoContato(String delegadoContato) {
-        this.delegadoContato = delegadoContato;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public PerfilUsuario getPerfil() {
-        return perfil;
-    }
-
-    public setPerfil(PerfilUsuario perfil) {
-        this.perfil = perfil;
-    }
 }

@@ -11,8 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "usuarios_base")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -52,60 +57,4 @@ public abstract class Usuario {
         this.dataNascimento = dataNascimento;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public LocalDateTime getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDateTime dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public PerfilUsuario getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(PerfilUsuario perfilUsuario)
-    {
-        this.perfil = perfilUsuario;
-    }
 }
