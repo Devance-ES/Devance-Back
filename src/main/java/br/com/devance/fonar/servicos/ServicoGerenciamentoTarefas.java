@@ -26,7 +26,6 @@ public class ServicoGerenciamentoTarefas {
 
     @Autowired
     private RepositorioTarefaTriagem repositorioTarefaTriagem;
-
     @Autowired
     private RepositorioFonar repositorioFonar; // Necessário para criar Tarefa a partir de um Fonar
     @Autowired

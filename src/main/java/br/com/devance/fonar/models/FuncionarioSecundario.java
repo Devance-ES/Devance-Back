@@ -2,6 +2,7 @@ package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.Cargo;
 
+import br.com.devance.fonar.enums.PerfilUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -32,6 +33,9 @@ public class FuncionarioSecundario extends Usuario{
     @Column (name = "ativo")
     private boolean ativo;
 
+    @Column (name = "Perfil")
+    private PerfilUsuario perfil;
+
     public FuncionarioSecundario() {
     }
 
@@ -40,7 +44,22 @@ public class FuncionarioSecundario extends Usuario{
         this.dataCadastro = data;
     }
 
+    public FuncionarioSecundario(LocalDate dataCadastro, Cargo cargo, Delegacia delegacia, boolean ativo, PerfilUsuario perfil) {
+        this.dataCadastro = dataCadastro;
+        this.cargo = cargo;
+        this.delegacia = delegacia;
+        this.ativo = ativo;
+        this.perfil = perfil;
+    }
 
+    public FuncionarioSecundario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento, LocalDate dataCadastro, Cargo cargo, Delegacia delegacia, boolean ativo, PerfilUsuario perfil) {
+        super(nome, cpf, email, senha, dataNascimento);
+        this.dataCadastro = dataCadastro;
+        this.cargo = cargo;
+        this.delegacia = delegacia;
+        this.ativo = ativo;
+        this.perfil = perfil;
+    }
 
     public boolean isAtivo() {
         return ativo;
@@ -74,9 +93,11 @@ public class FuncionarioSecundario extends Usuario{
         this.delegacia = delegacia;
     }
 
-    public void registrarFonar(){}
+    public PerfilUsuario getPerfil() {
+        return perfil;
+    }
 
-    public void acessarHistorico(){}
-
-    public void uploadFonar(){}
+    public void setPerfil(PerfilUsuario perfil) {
+        this.perfil = perfil;
+    }
 }
