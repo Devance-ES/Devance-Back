@@ -1,9 +1,6 @@
 # Versão da sintaxe do Docker Compose. A versão '3.8' é uma boa escolha, moderna e com muitos recursos.
 version: '3.8'
 
-# Seção que define os serviços (containers) que compõem sua aplicação.
-# Cada chave sob 'services' é o nome de um serviço, que também pode ser usado
-# como hostname para comunicação entre os containers dentro da rede do Compose.
 services:
   # 1. Serviço do Banco de Dados MySQL
   db:

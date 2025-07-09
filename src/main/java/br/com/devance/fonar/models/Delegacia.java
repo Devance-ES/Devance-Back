@@ -45,8 +45,6 @@ public class Delegacia {
     @Column
     private StatusDelegacia statusDelegacia;
 
-
-
     public Delegacia() {
     }
 

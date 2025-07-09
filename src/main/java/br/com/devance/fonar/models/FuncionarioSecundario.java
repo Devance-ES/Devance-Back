@@ -26,7 +26,7 @@ public class FuncionarioSecundario extends Usuario{
     private Cargo cargo;
 
     @ManyToOne
-    @JoinColumn(name = "delegacia_id", nullable = false)
+    @JoinColumn(name = "delegacia_id")
     private Delegacia delegacia;
 
     @Column (name = "ativo")

@@ -15,7 +15,7 @@ public class Delegado extends Usuario{
     private LocalDate dataCadastro;
 
     @ManyToOne
-    @JoinColumn(name = "delegacia_id", nullable = false)
+    @JoinColumn(name = "delegacia_id")
     private Delegacia delegacia;
 
     public Delegado() {
