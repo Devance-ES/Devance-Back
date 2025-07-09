@@ -1,5 +1,6 @@
 package br.com.devance.fonar.models;
 
+import br.com.devance.fonar.enums.PerfilUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -36,6 +37,9 @@ public abstract class Usuario {
 
     @Column(name = "data_nascimento")
     private LocalDateTime dataNascimento;
+
+    @Column(name = "perfil_suario")
+    private PerfilUsuario perfil;
 
     public Usuario() {
     }
@@ -94,5 +98,14 @@ public abstract class Usuario {
 
     public void setDataNascimento(LocalDateTime dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public PerfilUsuario getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(PerfilUsuario perfilUsuario)
+    {
+        this.perfil = perfilUsuario;
     }
 }

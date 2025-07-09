@@ -4,10 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 @Entity
 @DiscriminatorValue("SUPER_ADMINISTRADOR")
 public class SuperAdministrador extends Usuario{
@@ -26,22 +31,6 @@ public class SuperAdministrador extends Usuario{
         super (nome,cpf,email, senha, nascimento);
         this.contato = contato;
         this.responsavelPor = new ArrayList<>();
-    }
-
-    public String getContato() {
-        return contato;
-    }
-
-    public void setContato(String contato) {
-        this.contato = contato;
-    }
-
-    public List<Delegacia> getResponsavelPor() {
-        return responsavelPor;
-    }
-
-    public void setResponsavelPor(List<Delegacia> responsavelPor) {
-        this.responsavelPor = responsavelPor;
     }
 
     public void cadastrarDelegacia(Delegacia delegacia) {

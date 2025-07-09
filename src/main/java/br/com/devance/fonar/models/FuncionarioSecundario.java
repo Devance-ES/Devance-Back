@@ -97,7 +97,7 @@ public class FuncionarioSecundario extends Usuario{
         return perfil;
     }
 
-    public void setPerfil(PerfilUsuario perfil) {
+    public setPerfil(PerfilUsuario perfil) {
         this.perfil = perfil;
     }
 }
