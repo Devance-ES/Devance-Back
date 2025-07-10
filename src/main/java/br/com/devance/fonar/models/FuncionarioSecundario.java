@@ -10,9 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +18,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @DiscriminatorValue("FUNCIONARIO_SECUNDARIO")
 public class FuncionarioSecundario extends Usuario{
 
@@ -39,30 +39,5 @@ public class FuncionarioSecundario extends Usuario{
 
     @Column (name = "Perfil")
     private PerfilUsuario perfil;
-
-    public FuncionarioSecundario() {
-    }
-
-    public FuncionarioSecundario(String nome, String cpf, String email, String senha, LocalDateTime nascimento, LocalDate data){
-        super (nome,cpf,email, senha,nascimento);
-        this.dataCadastro = data;
-    }
-
-    public FuncionarioSecundario(LocalDate dataCadastro, Cargo cargo, Delegacia delegacia, boolean ativo, PerfilUsuario perfil) {
-        this.dataCadastro = dataCadastro;
-        this.cargo = cargo;
-        this.delegacia = delegacia;
-        this.ativo = ativo;
-        this.perfil = perfil;
-    }
-
-    public FuncionarioSecundario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento, LocalDate dataCadastro, Cargo cargo, Delegacia delegacia, boolean ativo, PerfilUsuario perfil) {
-        super(nome, cpf, email, senha, dataNascimento);
-        this.dataCadastro = dataCadastro;
-        this.cargo = cargo;
-        this.delegacia = delegacia;
-        this.ativo = ativo;
-        this.perfil = perfil;
-    }
 
 }

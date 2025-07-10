@@ -11,13 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "usuarios_base")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -45,16 +49,5 @@ public abstract class Usuario {
 
     @Column(name = "perfil_suario")
     private PerfilUsuario perfil;
-
-    public Usuario() {
-    }
-
-    public Usuario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento){
-        this.nome = nome;
-        this.cpf = cpf;
-        this.email = email;
-        this.senha = senha;
-        this.dataNascimento = dataNascimento;
-    }
 
 }

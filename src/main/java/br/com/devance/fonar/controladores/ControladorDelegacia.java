@@ -37,7 +37,7 @@ public class ControladorDelegacia {
     }
 
     // UC-005: Cadastrar nova delegacia
-    @PostMapping ("/delegacia")// POST /api/v1/delegacias
+    @PostMapping ("/delegacia")// POST /api/delegacias
     public ResponseEntity<Delegacia> cadastrarNovaDelegacia(
             @RequestBody DTOEntradaDelegacia dtoEntrada,
             // O ID do executor viria do token JWT do usuário autenticado (Super Administrador)
@@ -51,7 +51,7 @@ public class ControladorDelegacia {
     }
 
     // UC-006: Validar cadastro de nova delegacia
-    @PutMapping("/{idDelegacia}/validar") // PUT /api/v1/delegacias/{idDelegacia}/validar?aprovar=true
+    @PutMapping("/{idDelegacia}/validar") // PUT /api/delegacias/{idDelegacia}/validar?aprovar=true
     public ResponseEntity<Delegacia> validarCadastroDelegacia(
             @PathVariable Long idDelegacia,
             @RequestParam boolean aprovar, // Query param: ?aprovar=true ou ?aprovar=false
@@ -64,7 +64,7 @@ public class ControladorDelegacia {
     }
 
     // UC-007: Selecionar responsável por uma delegacia
-    @PutMapping("/{idDelegacia}/responsavel") // PUT /api/v1/delegacias/{idDelegacia}/responsavel
+    @PutMapping("/{idDelegacia}/responsavel") // PUT /api/delegacias/{idDelegacia}/responsavel
     public ResponseEntity<Delegacia> selecionarResponsavelDelegacia(
             @PathVariable Long idDelegacia,
             @RequestBody DTOAtribuicaoResponsavelDelegacia dtoAtribuicao, // DTO contendo o ID do novo responsável
@@ -78,7 +78,7 @@ public class ControladorDelegacia {
     }
 
     // UC-008: Alterar dados cadastrais de uma delegacia
-    @PutMapping("/{idDelegacia}/dados") // PUT /api/v1/delegacias/{idDelegacia}/dados
+    @PutMapping("/{idDelegacia}/dados") // PUT /api/delegacias/{idDelegacia}/dados
     public ResponseEntity<Delegacia> alterarDadosDelegacia(
             @PathVariable Long idDelegacia,
             @RequestBody DTOAtualizacaoDelegacia dtoAtualizacao, // DTO com os dados a serem atualizados
@@ -91,7 +91,7 @@ public class ControladorDelegacia {
     }
 
     // UC-009: Desativar uma delegacia
-    @PutMapping("/{idDelegacia}/desativar") // PUT /api/v1/delegacias/{idDelegacia}/desativar
+    @PutMapping("/{idDelegacia}/desativar") // PUT api/delegacias/{idDelegacia}/desativar
     public ResponseEntity<Delegacia> desativarDelegacia(
             @PathVariable Long idDelegacia,
             @RequestHeader(name = "X-User-Id", required = false) Long idSuperAdminExecutor) {
@@ -102,10 +102,9 @@ public class ControladorDelegacia {
         return ResponseEntity.ok(delegaciaDesativada); // Retorna 200 OK
     }
 
-    // UC-010: Acessar um resumo de uma delegacia (lista de todas as delegacias ativas para SA)
-    @GetMapping("/resumo") // GET /api/v1/delegacias/resumo
+    // UC-010: Acessar um resumo de uma delegacia
+    @GetMapping("/resumo") // GET /api/delegacias/resumo
     public ResponseEntity<List<Delegacia>> obterResumoDelegacias() {
-        // A autorização para este endpoint seria feita via Spring Security (ex: @PreAuthorize("hasRole('SUPER_ADMIN')"))
         List<Delegacia> resumoDelegacias = servicoDelegacia.obterTodasDelegaciasAtivasOuResumo();
         return ResponseEntity.ok(resumoDelegacias); // Retorna 200 OK
     }
@@ -113,7 +112,7 @@ public class ControladorDelegacia {
     // --- Métodos de Delegados e Funcionários (Gestão interna da Delegacia) ---
 
     // UC-012: Cadastrar funcionários secundários
-    @PostMapping("/{idDelegacia}/funcionarios") // POST /api/v1/delegacias/{idDelegacia}/funcionarios
+    @PostMapping("/{idDelegacia}/funcionarios") // POST /api/delegacias/{idDelegacia}/funcionarios
     public ResponseEntity<FuncionarioSecundario> cadastrarFuncionarioSecundario(
             @PathVariable Long idDelegacia, // ID da delegacia que está cadastrando o funcionário
             @RequestBody DTOEntradaFuncionarioSecundario dtoEntradaFuncionario,
@@ -127,7 +126,7 @@ public class ControladorDelegacia {
     }
 
     // UC-028: Remover um colaborador de uma delegacia (Delegado)
-    @DeleteMapping("/{idDelegacia}/funcionarios/{idFuncionario}") // DELETE /api/v1/delegacias/{idDelegacia}/funcionarios/{idFuncionario}
+    @DeleteMapping("/{idDelegacia}/funcionarios/{idFuncionario}") // DELETE /api/delegacias/{idDelegacia}/funcionarios/{idFuncionario}
     public ResponseEntity<Void> removerColaboradorDelegacia(
             @PathVariable Long idDelegacia,
             @PathVariable Long idFuncionario,
