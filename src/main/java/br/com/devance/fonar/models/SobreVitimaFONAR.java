@@ -3,184 +3,73 @@ package br.com.devance.fonar.models;
 import br.com.devance.fonar.enums.CorRaca;
 import br.com.devance.fonar.enums.FaixaEtariaFilhos;
 
+import br.com.devance.fonar.enums.SituacaoFilhos;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-public class SobreVitimaFONAR
-{
-    // 1. Informações sobre Filhos
-    private boolean temFilhosComAgressor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Embeddable
+public class SobreVitimaFONAR {
 
-    private int qtdFilhos; // Quantidade total de filhos (com ou sem agressor)
+    @Column(name = "vitima_tentou_separar")
+    private Boolean tentouSeparar;
 
-    private boolean filhoForaRel; // Se tem filhos de outros relacionamentos
+    @Column(name = "vitima_situacao_filhos")
+    @Enumerated(EnumType.STRING)
+    private SituacaoFilhos situacaoFilhos;
 
-    private int qtdFilhosFora; // Quantidade de filhos de outros relacionamentos
+    @Column(name = "vitima_qtd_filhos_com_agressor")
+    private Integer qtdFilhosComAgressor;
 
-    private boolean naoTemFilhos;
+    @Column(name = "vitima_qtd_filhos_de_outro_relacionamento")
+    private Integer qtdFilhosDeOutroRelacionamento;
 
+    @ElementCollection
+    @CollectionTable(name = "fonars_vitima_faixa_etaria_filhos", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "faixa_etaria")
+    @Enumerated(EnumType.STRING)
     private List<FaixaEtariaFilhos> faixaEtariaFilhos;
 
+    @Column(name = "vitima_tem_filhos_deficientes")
     private boolean temFilhosDeficientes;
 
+    @Column(name = "vitima_qtd_filhos_deficiencia")
     private int qtdFilhosDeficiencia;
 
+
+    @Column(name = "vitima_conflito_de_guarda")
     private boolean conflitoDeGuarda;
 
+    @Column(name = "vitima_filhos_viram_violencia")
     private boolean filhosViramViolencia;
 
-    // 2. Condição da Vítima (Violência em contextos específicos)
-    private boolean violenciaGravidezPosParto; // Violência ocorrida durante gravidez ou pós-parto
+    @Column(name = "vitima_violencia_gravidez_pos_parto")
+    private boolean violenciaGravidezPosParto;
 
-    private boolean novoRelAumentaViolencia; // Se o novo relacionamento da vítima aumentou a violência
+    @Column(name = "vitima_novo_rel_aumenta_violencia")
+    private boolean novoRelAumentaViolencia;
 
-    // 3. Condição Física e Demográfica da Vítima
-    private boolean possuiDeficiencia; // Se a própria vítima possui deficiência
+    @Column(name = "vitima_possui_deficiencia")
+    private boolean possuiDeficiencia;
 
-    private String qualDeficiencia; // Descrição da deficiência, se houver
+    @Column(name = "vitima_qual_deficiencia", length = 255)
+    private String qualDeficiencia;
 
+    @Column(name = "vitima_cor_raca")
+    @Enumerated(EnumType.STRING)
     private CorRaca corRaca;
-
-    public SobreVitimaFONAR(boolean temFilhosComAgressor, int qtdFilhos, boolean filhoForaRel, int qtdFilhosFora,
-                            boolean naoTemFilhos, List<FaixaEtariaFilhos> faixaEtariaFilhos,
-                            boolean temFilhosDeficientes, int qtdFilhosDeficiencia, boolean conflitoDeGuarda,
-                            boolean filhosViramViolencia, boolean violenciaGravidezPosParto,
-                            boolean novoRelAumentaViolencia, boolean possuiDeficiencia, String qualDeficiencia,
-                            CorRaca corRaca)
-    {
-        this.temFilhosComAgressor = temFilhosComAgressor;
-        this.qtdFilhos = qtdFilhos;
-        this.filhoForaRel = filhoForaRel;
-        this.qtdFilhosFora = qtdFilhosFora;
-        this.naoTemFilhos = naoTemFilhos;
-        this.faixaEtariaFilhos = faixaEtariaFilhos;
-        this.temFilhosDeficientes = temFilhosDeficientes;
-        this.qtdFilhosDeficiencia = qtdFilhosDeficiencia;
-        this.conflitoDeGuarda = conflitoDeGuarda;
-        this.filhosViramViolencia = filhosViramViolencia;
-        this.violenciaGravidezPosParto = violenciaGravidezPosParto;
-        this.novoRelAumentaViolencia = novoRelAumentaViolencia;
-        this.possuiDeficiencia = possuiDeficiencia;
-        this.qualDeficiencia = qualDeficiencia;
-        this.corRaca = corRaca;
-    }
-
-    public boolean isTemFilhosComAgressor() {
-        return temFilhosComAgressor;
-    }
-
-    public void setTemFilhosComAgressor(boolean temFilhosComAgressor) {
-        this.temFilhosComAgressor = temFilhosComAgressor;
-    }
-
-    public int getQtdFilhos() {
-        return qtdFilhos;
-    }
-
-    public void setQtdFilhos(int qtdFilhos) {
-        this.qtdFilhos = qtdFilhos;
-    }
-
-    public boolean isFilhoForaRel() {
-        return filhoForaRel;
-    }
-
-    public void setFilhoForaRel(boolean filhoForaRel) {
-        this.filhoForaRel = filhoForaRel;
-    }
-
-    public int getQtdFilhosFora() {
-        return qtdFilhosFora;
-    }
-
-    public void setQtdFilhosFora(int qtdFilhosFora) {
-        this.qtdFilhosFora = qtdFilhosFora;
-    }
-
-    public boolean isNaoTemFilhos() {
-        return naoTemFilhos;
-    }
-
-    public void setNaoTemFilhos(boolean naoTemFilhos) {
-        this.naoTemFilhos = naoTemFilhos;
-    }
-
-    public List<FaixaEtariaFilhos> getFaixaEtariaFilhos() {
-        return faixaEtariaFilhos;
-    }
-
-    public void setFaixaEtariaFilhos(List<FaixaEtariaFilhos> faixaEtariaFilhos) {
-        this.faixaEtariaFilhos = faixaEtariaFilhos;
-    }
-
-    public boolean isTemFilhosDeficientes() {
-        return temFilhosDeficientes;
-    }
-
-    public void setTemFilhosDeficientes(boolean temFilhosDeficientes) {
-        this.temFilhosDeficientes = temFilhosDeficientes;
-    }
-
-    public int getQtdFilhosDeficiencia() {
-        return qtdFilhosDeficiencia;
-    }
-
-    public void setQtdFilhosDeficiencia(int qtdFilhosDeficiencia) {
-        this.qtdFilhosDeficiencia = qtdFilhosDeficiencia;
-    }
-
-    public boolean isConflitoDeGuarda() {
-        return conflitoDeGuarda;
-    }
-
-    public void setConflitoDeGuarda(boolean conflitoDeGuarda) {
-        this.conflitoDeGuarda = conflitoDeGuarda;
-    }
-
-    public boolean isFilhosViramViolencia() {
-        return filhosViramViolencia;
-    }
-
-    public void setFilhosViramViolencia(boolean filhosViramViolencia) {
-        this.filhosViramViolencia = filhosViramViolencia;
-    }
-
-    public boolean isViolenciaGravidezPosParto() {
-        return violenciaGravidezPosParto;
-    }
-
-    public void setViolenciaGravidezPosParto(boolean violenciaGravidezPosParto) {
-        this.violenciaGravidezPosParto = violenciaGravidezPosParto;
-    }
-
-    public boolean isNovoRelAumentaViolencia() {
-        return novoRelAumentaViolencia;
-    }
-
-    public void setNovoRelAumentaViolencia(boolean novoRelAumentaViolencia) {
-        this.novoRelAumentaViolencia = novoRelAumentaViolencia;
-    }
-
-    public boolean isPossuiDeficiencia() {
-        return possuiDeficiencia;
-    }
-
-    public void setPossuiDeficiencia(boolean possuiDeficiencia) {
-        this.possuiDeficiencia = possuiDeficiencia;
-    }
-
-    public String getQualDeficiencia() {
-        return qualDeficiencia;
-    }
-
-    public void setQualDeficiencia(String qualDeficiencia) {
-        this.qualDeficiencia = qualDeficiencia;
-    }
-
-    public CorRaca getCorRaca() {
-        return corRaca;
-    }
-
-    public void setCorRaca(CorRaca corRaca) {
-        this.corRaca = corRaca;
-    }
 }

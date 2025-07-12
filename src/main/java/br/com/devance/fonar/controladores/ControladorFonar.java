@@ -1,10 +1,14 @@
 package br.com.devance.fonar.controladores;
 
-import br.com.devance.fonar.models.Fonar;
-import br.com.devance.fonar.models.DTOHistoricoFonar;
-import br.com.devance.fonar.models.DTOFiltroFonar;
+import br.com.devance.fonar.dto.DTOEntradaFonar;
+import br.com.devance.fonar.dto.DTOFiltroFonar;
+import br.com.devance.fonar.dto.DTOHistoricoFonar;
+import br.com.devance.fonar.dto.DTOSaidaFonar;
+import br.com.devance.fonar.models.Delegacia;
+import br.com.devance.fonar.models.Usuario;
 import br.com.devance.fonar.servicos.ServicoFonar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,17 @@ public class ControladorFonar {
     @Autowired
     private ServicoFonar servicoFonar;
 
+    @PostMapping("/test") // TODO: apagar depois
+    public ResponseEntity<String> teste(@RequestBody String mensagem) {
+        return ResponseEntity.ok(mensagem);
+    }
+
+    @PostMapping("/test/saveRandomData") // TODO: apagar depois
+    public ResponseEntity<String> salvarDadosAleatorios() {
+        servicoFonar.salvarDadosAleatorios();
+        return ResponseEntity.ok("Dados aleatórios salvos com sucesso.");
+    }
+
     @GetMapping("/historico/vitima/{cpf}")
     public ResponseEntity<List<DTOHistoricoFonar>> obterHistoricoFonarVitima(
             @PathVariable String cpf,
@@ -28,12 +43,34 @@ public class ControladorFonar {
     }
 
     @GetMapping("/historico/vitima/{cpf}/detalhes/{idFonar}")
-    public ResponseEntity<Fonar> obterDetalhesFonarVitima(
+    public ResponseEntity<DTOSaidaFonar> obterDetalhesFonarVitima(
             @PathVariable String cpf,
             @PathVariable UUID idFonar) {
 
+        DTOSaidaFonar dto = servicoFonar.obterDetalhesFonarVitima(idFonar, cpf);
+        return ResponseEntity.ok(dto);
+    }
 
-        Fonar detalhesFonar = servicoFonar.obterDetalhesFonarVitima(idFonar, cpf);
-        return ResponseEntity.ok(detalhesFonar);
+    // UC01, UC02, UC03: Acessar, Preencher, Revisar e Enviar o FONAR (Vítima)
+    @PostMapping("/publico")
+    public ResponseEntity<DTOSaidaFonar> registrarFonarPublico(@RequestBody DTOEntradaFonar dtoEntradaFonar) {
+        DTOSaidaFonar dto = servicoFonar.registrarFonarOnline(dtoEntradaFonar);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    }
+
+    // UC16: Registrar Novo FONAR (para Delegados e Funcionários)
+    @PostMapping("/instituicao")
+    public ResponseEntity<DTOSaidaFonar> registrarFonarInstituicao(
+            @RequestBody DTOEntradaFonar dtoEntradaFonar,
+            @RequestParam(name = "idDelegacia") Long idDelegacia,
+            @RequestParam(name = "idUsuarioResponsavel") Long idUsuarioResponsavel) {
+
+        // Buscar entidades delegacia e usuario (você pode passar para o service fazer
+        // isso)
+        Delegacia delegacia = servicoFonar.buscarDelegaciaPorId(idDelegacia);
+        Usuario usuarioResponsavel = servicoFonar.buscarUsuarioPorId(idUsuarioResponsavel);
+
+        DTOSaidaFonar dto = servicoFonar.registrarNovoFonar(dtoEntradaFonar, delegacia, usuarioResponsavel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }

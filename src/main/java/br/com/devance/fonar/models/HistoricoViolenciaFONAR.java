@@ -2,49 +2,55 @@ package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.TipoAgressaoQ2;
 import br.com.devance.fonar.enums.TipoAgressaoQ3;
-import lombok.Setter;
+import br.com.devance.fonar.enums.TipoAmeaca;
+import br.com.devance.fonar.enums.TipoComportamento;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Embeddable
 public class HistoricoViolenciaFONAR {
 
-    @Setter
-    private boolean ameacouArma;
-    private boolean ameacouFaca;
-    private boolean ameacouOutraForma;
-    private boolean naoAmeacou;
-    private List<TipoAgressaoQ2> agressoesFisicasQ2;
-    private List<TipoAgressaoQ3> agressoesFisicasQ3;
-    private boolean obrigouSexo;
-    private boolean sentimentoPosse;
-    private boolean pertubouPerseguiuVigiou;
-    private boolean proibiuVisita;
-    private boolean proibiuTrabalhoEstudo;
-    private boolean contatoInsistente;
-    private boolean bloqueouBens;
-    private boolean ciumesEControle;
-    private boolean nenhumComportamentoAcima;
-    private boolean jaRegistrouBOAntes;
-    private boolean frequentesRecentemente;
+    @ElementCollection
+    @CollectionTable(name = "fonars_historico_violencia_ameaca", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "tipo_ameaca")
+    @Enumerated(EnumType.STRING)
+    private Set<TipoAmeaca> ameacas;
 
-    public HistoricoViolenciaFONAR(boolean ameacouArma, boolean ameacouFaca, boolean ameacouOutraForma, boolean naoAmeacou, boolean obrigouSexo, boolean sentimentoPosse, boolean pertubouPerseguiuVigio,
-                                   boolean proibiuVisita, boolean proibiuTrabalhoEstudo, boolean contatoInsistente, boolean bloqueouBens, boolean ciumesEControle, boolean nenhumComportamentoAcima,
-                                   boolean jaRegistrouBOAntes, boolean frequentesRecentemente) {
+    @ElementCollection
+    @CollectionTable(name = "fonars_hist_violencia_q2", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "tipo_agressao_q2")
+    @Enumerated(EnumType.STRING)
+    private Set<TipoAgressaoQ2> agressoesFisicasQ2;
 
-        this.ameacouArma = ameacouArma;
-        this.ameacouFaca = ameacouFaca;
-        this.ameacouOutraForma = ameacouOutraForma;
-        this.naoAmeacou = naoAmeacou;
-        this.obrigouSexo = obrigouSexo;
-        this.sentimentoPosse = sentimentoPosse;
-        this.pertubouPerseguiuVigiou = pertubouPerseguiuVigio;
-        this.proibiuVisita = proibiuVisita;
-        this.proibiuTrabalhoEstudo = proibiuTrabalhoEstudo;
-        this.contatoInsistente = contatoInsistente;
-        this.bloqueouBens = bloqueouBens;
-        this.ciumesEControle = ciumesEControle;
-        this.nenhumComportamentoAcima = nenhumComportamentoAcima;
-        this.jaRegistrouBOAntes = jaRegistrouBOAntes;
-        this.frequentesRecentemente = frequentesRecentemente;
-    }
+    @ElementCollection
+    @CollectionTable(name = "fonars_hist_violencia_q3", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "tipo_agressao_q3")
+    @Enumerated(EnumType.STRING)
+    private Set<TipoAgressaoQ3> agressoesFisicasQ3;
+
+    private Boolean obrigouSexo;
+
+    @ElementCollection
+    @CollectionTable(name = "fonars_hist_violencia_comportamentos", joinColumns = @JoinColumn(name = "fonar_id"))
+    @Column(name = "tipo_comportamento")
+    @Enumerated(EnumType.STRING)
+    private Set<TipoComportamento> comportamentos;
+
+    private Boolean jaRegistrouBOAntes;
+    private Boolean frequentesRecentemente;
 }

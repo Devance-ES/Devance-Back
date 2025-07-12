@@ -1,0 +1,67 @@
+# Versão da sintaxe do Docker Compose. A versão '3.8' é uma boa escolha, moderna e com muitos recursos.
+version: '3.8'
+
+services:
+  # 1. Serviço do Banco de Dados PostgreSQL
+  db:
+    image: postgres:16
+    container_name: fonar_db_container
+    environment:
+      POSTGRES_DB: fonar_db
+      POSTGRES_USER: fonar_user
+      POSTGRES_PASSWORD: fonar_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "fonar_user", "-d", "fonar_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # 2. Serviço da Aplicação Spring Boot (devance-backend)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: devance-backend-app-fonar
+    container_name: fonar_app_container
+
+    ports:
+      - "8080:8080"
+
+    # run server-test.sh after the app starts to validate the server
+    healthcheck:
+      test: ["CMD", "/app/server-test.sh", "localhost", "8080", "/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    # Variáveis de ambiente para a aplicação Spring Boot.
+    # ESTAS SÃO AS VARIÁVEIS DA SUA APLICAÇÃO SPRING BOOT!
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/fonar_db
+      DATABASE_USERNAME: fonar_user
+      DATABASE_PASSWORD: fonar_password
+      # spring.devtools.restart.enabled: false
+      # logging.level.org.springframework: DEBUG
+      # logging.level.org.hibernate: DEBUG
+
+    # volumes:
+    #   - ./target/classes:/app/classes
+    #   - ~/.m2:/root/.m2
+
+    # volumes:
+    #   - ./server-test.sh:/app/server-test.sh:ro
+
+# Seção que define os volumes nomeados.
+volumes:
+  db_data:
