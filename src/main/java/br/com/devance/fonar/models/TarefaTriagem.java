@@ -53,7 +53,4 @@ public class TarefaTriagem {
     @Column(columnDefinition = "TEXT")
     private String observacoes;
 
-    public TarefaTriagem() {
-    }
-
 }
