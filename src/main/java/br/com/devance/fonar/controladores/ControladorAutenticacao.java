@@ -1,4 +1,4 @@
-package br.com.devance.fonar.controladores;
+/*package br.com.devance.fonar.controladores;
 
 import br.com.devance.fonar.excecoes.ExcecaoRecursoNaoEncontrado;
 import br.com.devance.fonar.dto.DTOAuthRequest; // DTO para requisição de login (atualizado)
@@ -75,4 +75,4 @@ public class ControladorAutenticacao {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DTOAuthResponse(null, null, null, null, "Erro interno no servidor durante o login: " + e.getMessage()));
         }
     }
-}
+}*/
