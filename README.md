@@ -15,3 +15,14 @@ Este projeto visa digitalizar o Formulário Nacional de Avaliação de Risco par
 * **Juarez Damião Lopes Filho** 
 * **Mateus Abdias dos Santos Silva**
 * **Rony Elias de Oliveira**
+
+## docker
+
+- reinicie o container do docker com o comando:
+
+```bash
+./docker-restart.sh
+```
+
+>[!NOTE]
+> Pode ser que precise de rodar o comando `chmod +x docker-restart.sh` para dar permissão de execução ao script.

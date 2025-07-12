@@ -1,4 +1,4 @@
-package br.com.devance.fonar.models;
+package br.com.devance.fonar.dto;
 
 import br.com.devance.fonar.enums.Status; // Status da TarefaTriagem
 import br.com.devance.fonar.enums.PrioridadeTarefas; // Prioridade da TarefaTriagem

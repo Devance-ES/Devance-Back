@@ -22,6 +22,17 @@ public class ControladorFonar {
     @Autowired
     private ServicoFonar servicoFonar;
 
+    @PostMapping("/test") // TODO: apagar depois
+    public ResponseEntity<String> teste(@RequestBody String mensagem) {
+        return ResponseEntity.ok(mensagem);
+    }
+
+    @PostMapping("/test/saveRandomData") // TODO: apagar depois
+    public ResponseEntity<String> salvarDadosAleatorios() {
+        servicoFonar.salvarDadosAleatorios();
+        return ResponseEntity.ok("Dados aleatórios salvos com sucesso.");
+    }
+
     @GetMapping("/historico/vitima/{cpf}")
     public ResponseEntity<List<DTOHistoricoFonar>> obterHistoricoFonarVitima(
             @PathVariable String cpf,
@@ -54,7 +65,8 @@ public class ControladorFonar {
             @RequestParam(name = "idDelegacia") Long idDelegacia,
             @RequestParam(name = "idUsuarioResponsavel") Long idUsuarioResponsavel) {
 
-        // Buscar entidades delegacia e usuario (você pode passar para o service fazer isso)
+        // Buscar entidades delegacia e usuario (você pode passar para o service fazer
+        // isso)
         Delegacia delegacia = servicoFonar.buscarDelegaciaPorId(idDelegacia);
         Usuario usuarioResponsavel = servicoFonar.buscarUsuarioPorId(idUsuarioResponsavel);
 

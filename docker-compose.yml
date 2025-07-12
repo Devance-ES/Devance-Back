@@ -2,32 +2,20 @@
 version: '3.8'
 
 services:
-  # 1. Serviço do Banco de Dados MySQL
+  # 1. Serviço do Banco de Dados PostgreSQL
   db:
-    image: mysql:8.0 # Define a imagem Docker a ser usada. Usamos a versão 8.0 do MySQL.
-    container_name: fonar_db_container # Nome explícito para o container (facilita a identificação no Docker Desktop)
-
-    # Variáveis de ambiente que serão passadas para o container MySQL.
-    # ESSAS SÃO AS VARIÁVEIS DO BANCO DE DADOS MYSQL!
+    image: postgres:16
+    container_name: fonar_db_container
     environment:
-      MYSQL_ROOT_PASSWORD: root_password # Senha do usuário 'root' do MySQL. Mude para uma senha forte em produção!
-      MYSQL_DATABASE: fonar_db # Nome do banco de dados que será criado automaticamente ao iniciar o container.
-      MYSQL_USER: fonar_user # <--- ALTERADO: Usuário para sua aplicação
-      MYSQL_PASSWORD: fonar_password # <--- ALTERADO: Senha para o usuário da aplicação
-
-    # Mapeamento de portas: "HOST_PORT:CONTAINER_PORT".
-    # Isso expõe a porta 3306 do container MySQL para a porta 3306 da sua máquina host.
+      POSTGRES_DB: fonar_db
+      POSTGRES_USER: fonar_user
+      POSTGRES_PASSWORD: fonar_password
     ports:
-      - "3306:3306"
-
-    # Volumes: Usado para persistir dados. Se o container for removido, os dados não serão perdidos.
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
-
-    # Healthcheck: (Recomendado) Define um comando para verificar a saúde do serviço.
-    # Adaptação do usuário no healthcheck:
+      - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "devance", "-pdev123"] # <--- ALTERADO
+      test: ["CMD", "pg_isready", "-U", "fonar_user", "-d", "fonar_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -45,6 +33,14 @@ services:
     ports:
       - "8080:8080"
 
+    # run server-test.sh after the app starts to validate the server
+    healthcheck:
+      test: ["CMD", "/app/server-test.sh", "localhost", "8080", "/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
     depends_on:
       db:
         condition: service_healthy
@@ -52,10 +48,9 @@ services:
     # Variáveis de ambiente para a aplicação Spring Boot.
     # ESTAS SÃO AS VARIÁVEIS DA SUA APLICAÇÃO SPRING BOOT!
     environment:
-      # URL de conexão corrigida, incluindo 'allowPublicKeyRetrieval=True'
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fonar_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=True
-      SPRING_DATASOURCE_USERNAME: fonar_user # <--- ALTERADO: Deve corresponder a MYSQL_USER em 'db'
-      SPRING_DATASOURCE_PASSWORD: fonar_password # <--- ALTERADO: Deve corresponder a MYSQL_PASSWORD em 'db'
+      DATABASE_URL: jdbc:postgresql://db:5432/fonar_db
+      DATABASE_USERNAME: fonar_user
+      DATABASE_PASSWORD: fonar_password
       # spring.devtools.restart.enabled: false
       # logging.level.org.springframework: DEBUG
       # logging.level.org.hibernate: DEBUG
@@ -63,6 +58,9 @@ services:
     # volumes:
     #   - ./target/classes:/app/classes
     #   - ~/.m2:/root/.m2
+
+    # volumes:
+    #   - ./server-test.sh:/app/server-test.sh:ro
 
 # Seção que define os volumes nomeados.
 volumes:

@@ -15,13 +15,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@NoArgsConstructor
+import jakarta.persistence.Version;
+
 @AllArgsConstructor
 @Entity
 @Table(name = "fonars")
@@ -97,6 +97,15 @@ public class Fonar {
     @Getter
     @Column(name = "caminho_imagem_original", length = 500)
     private String caminhoImagemOriginal;
+
+    @Version
+    @Getter
+    @Setter
+    private Long version;
+
+    public Fonar() {
+        this.dataRegistro = LocalDate.now();
+    }
 
     public Enum<Status> getStatusTriagem() {
         return statusTriagem;

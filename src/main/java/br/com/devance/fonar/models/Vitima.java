@@ -6,18 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDate; // Importa LocalDate, mais comum para data de nascimento
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "vitimas_info")
 public class Vitima {
@@ -40,5 +31,60 @@ public class Vitima {
 
     @Column(length = 255)
     private String email;
+
+    public Vitima() {
+    }
+
+    public Vitima(String cpf, String nome, LocalDateTime nascimento,String contato,String email){
+        this.cpf = cpf;
+        this.nome = nome;
+        this.dataNascimento =nascimento.toLocalDate(); // Converte LocalDateTime para LocalDate no construtor
+        this.numeroContato = contato;
+        this.email = email;
+    }
+
+    public String getCpf() {return cpf;}
+
+    public void setCpf(String cpf) {this.cpf = cpf;}
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getDataNascimento() { // Getter retorna LocalDate
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) { // Setter recebe LocalDate
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getNumeroContato() {
+        return numeroContato;
+    }
+
+    public void setNumeroContato(String numeroContato) {
+        this.numeroContato = numeroContato;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

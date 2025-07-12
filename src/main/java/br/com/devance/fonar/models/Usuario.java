@@ -1,6 +1,5 @@
 package br.com.devance.fonar.models;
 
-import br.com.devance.fonar.enums.PerfilUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -11,17 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "usuarios_base")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -47,7 +37,62 @@ public abstract class Usuario {
     @Column(name = "data_nascimento")
     private LocalDateTime dataNascimento;
 
-    @Column(name = "perfil_suario")
-    private PerfilUsuario perfil;
+    public Usuario() {
+    }
 
+    public Usuario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento){
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public LocalDateTime getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDateTime dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
 }
