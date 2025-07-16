@@ -1,20 +1,25 @@
 package br.com.devance.fonar.servicos;
 
+import br.com.devance.fonar.dto.DTOCadastroUsuario;
 import br.com.devance.fonar.enums.PerfilUsuario;
-import br.com.devance.fonar.excecoes.ExcecaoRecursoNaoEncontrado; // Reutiliza exceção de recurso não encontrado para usuário
-import br.com.devance.fonar.models.Usuario; // Classe base de usuário
-import br.com.devance.fonar.models.Delegado; // Subclasses para inferir perfil
+import br.com.devance.fonar.models.Usuario;
+import br.com.devance.fonar.models.Delegado;
 import br.com.devance.fonar.models.FuncionarioSecundario;
 import br.com.devance.fonar.models.SuperAdministrador;
+import br.com.devance.fonar.models.Vitima;
 
-import br.com.devance.fonar.repositorios.RepositorioUsuario; // Repositório genérico de usuário
+import br.com.devance.fonar.repositorios.RepositorioUsuario;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User; // Objeto User do Spring Security
-import org.springframework.security.core.userdetails.UserDetails; // Interface UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService; // Interface UserDetailsService
-import org.springframework.security.core.userdetails.UsernameNotFoundException; // Exceção para usuário não encontrado
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 public class ServicoAutenticacao implements UserDetailsService {
@@ -22,33 +27,71 @@ public class ServicoAutenticacao implements UserDetailsService {
     @Autowired
     private RepositorioUsuario repositorioUsuario;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // O 'username' pode ser o CPF ou o email
+        // Busca o usuário pelo CPF ou email
         Usuario usuario = repositorioUsuario.findByCpf(username)
                 .orElseGet(() -> repositorioUsuario.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username)));
 
-        // --- Lógica para identificar o perfil a partir da classe concreta ---
-        // Esta lógica é necessária porque a classe Usuario (base) não tem um campo 'perfil'
-        String role = "";
-        if (usuario instanceof Delegado) {
-            role = PerfilUsuario.DELEGADO.name();
-        } else if (usuario instanceof FuncionarioSecundario) {
-            role = PerfilUsuario.FUNCIONARIO_SECUNDARIO.name();
-        } else if (usuario instanceof SuperAdministrador) {
-            role = PerfilUsuario.SUPER_ADMIN.name();
-        } else {
-            throw new UsernameNotFoundException("Perfil de usuário não reconhecido para: " + username);
+        if (!usuario.isAtivo()) {
+            throw new UsernameNotFoundException("Usuário inativo ou bloqueado: " + username);
         }
-        // --- Fim da lógica de perfil ---
-        repositorioUsuario.save(usuario); // Salva a atualização
 
-        // Retorna um objeto UserDetails que o Spring Security usará para comparação de senha e autorização
-        return User.withUsername(usuario.getCpf()) // Ou usuario.getEmail() se esse for o username principal
-                .password(usuario.getSenha()) // >>>>> ESTE É A SENHA QUE SERÁ COMPARADA <<<<< (hash ou texto plano)
-                .roles(role) // As roles são o nome do PerfilUsuario
+        // Atualiza o último login
+        usuario.setUltimoLogin(LocalDateTime.now());
+        repositorioUsuario.save(usuario);
+
+        // Retorna um objeto UserDetails que o Spring Security usará
+        // A senha retornada aqui (usuario.getSenha()) será comparada pelo PasswordEncoder
+        // O perfil (role) é obtido diretamente do atributo 'perfil' da entidade Usuario
+        return User.withUsername(usuario.getCpf())
+                .password(usuario.getSenha())
+                .roles(usuario.getPerfil().name())
                 .build();
+    }
+
+    // Metodo para registrar um novo usuário (Delegado, Funcionário, Vítima)
+    @Transactional
+    public Usuario registrarUsuario(DTOCadastroUsuario dtoCadastro) {
+        // Validação de unicidade de CPF e Email
+        if (repositorioUsuario.existsByCpf(dtoCadastro.getCpf())) {
+            throw new IllegalArgumentException("Já existe um usuário com este CPF.");
+        }
+        if (repositorioUsuario.existsByEmail(dtoCadastro.getEmail())) {
+            throw new IllegalArgumentException("Já existe um usuário com este e-mail.");
+        }
+
+        // Determinar qual subclasse de Usuario criar com base no perfil
+        Usuario novoUsuario;
+        switch (dtoCadastro.getPerfil()) {
+            case DELEGADO:
+                novoUsuario = new Delegado(); // Construtor sem argumentos
+                break;
+            case FUNCIONARIO_SECUNDARIO:
+                novoUsuario = new FuncionarioSecundario(); // Construtor sem argumentos
+                break;
+            default:
+                throw new IllegalArgumentException("Perfil de usuário inválido.");
+        }
+
+        // Copiar propriedades comuns (nome, cpf, email, dataNascimento)
+        BeanUtils.copyProperties(dtoCadastro, novoUsuario, "senha"); // Copia tudo menos a senha (que será hasheada)
+
+        novoUsuario.setSenha(dtoCadastro.getSenha());
+
+        // Definir o perfil diretamente (já que o atributo está na classe Usuario)
+        novoUsuario.setPerfil(dtoCadastro.getPerfil());
+
+        // Outros atributos padrão da classe Usuario (dataCadastro, ativo, tentativasFalhas)
+        novoUsuario.setDataCadastro(LocalDateTime.now());
+        novoUsuario.setAtivo(true);
+        novoUsuario.setTentativasFalhas(0);
+
+        // Salvar o novo usuário (que será persistido na tabela usuarios_base)
+        Usuario usuarioSalvo = repositorioUsuario.save(novoUsuario);
+
+        // Retornar o objeto completo salvo
+        return usuarioSalvo;
     }
 }

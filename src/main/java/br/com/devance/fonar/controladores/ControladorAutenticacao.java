@@ -1,78 +1,87 @@
-/*package br.com.devance.fonar.controladores;
+package br.com.devance.fonar.controladores;
 
-import br.com.devance.fonar.excecoes.ExcecaoRecursoNaoEncontrado;
-import br.com.devance.fonar.dto.DTOAuthRequest; // DTO para requisição de login (atualizado)
-import br.com.devance.fonar.dto.DTOAuthResponse; // DTO para resposta de login (atualizado)
-import br.com.devance.fonar.models.Usuario; // Entidade Usuario
+import br.com.devance.fonar.dto.DTOCadastroUsuario;
+import br.com.devance.fonar.excecoes.ExcecaoRecursoNaoEncontrado; // Para tratamento de erros
+import br.com.devance.fonar.dto.DTOAuthRequest;
+import br.com.devance.fonar.dto.DTOAuthResponse;
+import br.com.devance.fonar.models.Usuario;
+import br.com.devance.fonar.repositorios.RepositorioUsuario;
+import br.com.devance.fonar.servicos.ServicoAutenticacao;
+import br.com.devance.fonar.servicos.TokenService;
 
-import br.com.devance.fonar.repositorios.RepositorioUsuario; // Repositório para buscar o Usuario completo
-import br.com.devance.fonar.servicos.ServicoAutenticacao; // Seu serviço de autenticação (UserDetailsService)
-
-import jakarta.validation.Valid; // Para validar o DTO de entrada
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication; // Objeto de autenticação do Spring Security
-import org.springframework.security.core.context.SecurityContextHolder; // Para acessar o contexto de segurança
-import org.springframework.security.core.userdetails.UsernameNotFoundException; // Exceção para usuário não encontrado
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth") // Caminho base para autenticação
+@RequestMapping("/auth")
 public class ControladorAutenticacao {
 
     @Autowired
-    private RepositorioUsuario repositorioUsuario; // Injetado para buscar o objeto Usuario completo após autenticação
+    private AuthenticationManager authenticationManager;
 
-    // O ServicoAutenticacao (que implementa UserDetailsService) é usado internamente pelo Spring Security.
-    // Não precisamos injetá-lo diretamente aqui, pois o AuthenticationManager é que o utiliza.
+    @Autowired
+    private TokenService tokenService; // Serviço para gerar o JWT
+
+    @Autowired
+    private ServicoAutenticacao servicoAutenticacao;
+
+    @Autowired
+    private RepositorioUsuario repositorioUsuario; // Para buscar o objeto Usuario completo
 
     @PostMapping("/login") // Endpoint POST para login
     public ResponseEntity<DTOAuthResponse> login(@Valid @RequestBody DTOAuthRequest authRequest) {
-        // Quando uma requisição com Basic Auth chega a este endpoint, se as credenciais estiverem corretas,
-        // o Spring Security já terá autenticado o usuário e preenchido o SecurityContextHolder ANTES de chegar aqui.
+        // Cria um token de autenticação com as credenciais fornecidas
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getSenha());
 
         try {
-            // Obtemos o objeto de autenticação do contexto de segurança do Spring
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            // Tenta autenticar o usuário. Se falhar, uma exceção será lançada.
+            Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-            // Verificamos se a autenticação foi bem-sucedida e o usuário está logado
-            if (authentication != null && authentication.isAuthenticated()) {
-                // O nome principal (principal.getName()) será o username que você usou no login (CPF ou email)
-                String username = authentication.getName();
+            // Se a autenticação foi bem-sucedida, o objeto 'auth.getPrincipal()' contém os UserDetails.
+            // Precisamos do objeto Usuario completo para pegar o ID e o perfil real.
+            Usuario usuarioLogado = (Usuario) auth.getPrincipal(); // Cast para sua entidade Usuario
 
-                // Buscamos o objeto Usuario completo no banco de dados
-                Usuario usuarioLogado = repositorioUsuario.findByCpf(username)
-                        .orElseGet(() -> repositorioUsuario.findByEmail(username)
-                                .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Usuário autenticado não encontrado no banco de dados.")));
+            // Gera o JWT usando o TokenService
+            String token = tokenService.generateToken(usuarioLogado);
 
-                // Em um sistema real, aqui você geraria um JWT (JSON Web Token)
-                // e o retornaria na resposta para ser usado em requisições futuras.
-                String tokenGerado = "dummy-jwt-token-para-usuario-" + usuarioLogado.getId();
+            return ResponseEntity.ok(new DTOAuthResponse(
+                    token,
+                    usuarioLogado.getId(),
+                    usuarioLogado.getCpf(),
+                    usuarioLogado.getPerfil(),
+                    "Login bem-sucedido!"
+            ));
 
-                return ResponseEntity.ok(new DTOAuthResponse(
-                        tokenGerado,
-                        usuarioLogado.getId(),
-                        usuarioLogado.getCpf(), // Retorna o CPF
-                        usuarioLogado.getPerfil(), // Assume que getPerfil() retorna o enum PerfilUsuario da entidade Usuario
-                        "Login bem-sucedido!"
-                ));
-            } else {
-                // Este bloco seria atingido se a autenticação falhar ANTES de chegar aqui,
-                // ou se houver um problema no fluxo de segurança.
-                // Na prática, o filtro HTTP Basic já retornaria 401 antes.
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTOAuthResponse(null, null, null, null, "Falha na autenticação ou credenciais inválidas."));
-            }
-        } catch (UsernameNotFoundException | ExcecaoRecursoNaoEncontrado e) {
-            // Captura exceções específicas de usuário não encontrado ou recurso não encontrado
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTOAuthResponse(null, null, null, null, "Credenciais inválidas: " + e.getMessage()));
+        } catch (UsernameNotFoundException e) {
+            // Trata o caso de usuário não encontrado (ou inativo/bloqueado)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTOAuthResponse(null, null, null, null, "Credenciais inválidas: Usuário não encontrado ou inativo/bloqueado."));
         } catch (Exception e) {
-            // Captura outras exceções inesperadas
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new DTOAuthResponse(null, null, null, null, "Erro interno no servidor durante o login: " + e.getMessage()));
+            // Captura outras exceções (ex: BadCredentialsException para senha incorreta)
+            // Para BadCredentialsException, o status também é 401 Unauthorized
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new DTOAuthResponse(null, null, null, null, "Credenciais inválidas."));
         }
     }
-}*/
+
+    @PostMapping("/register")
+    public ResponseEntity<Usuario> register(@Valid @RequestBody DTOCadastroUsuario dtoCadastro) {
+        try {
+            Usuario novoUsuario = servicoAutenticacao.registrarUsuario(dtoCadastro);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Retorne um corpo de erro mais útil aqui
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Retorne um corpo de erro mais útil aqui
+        }
+    }
+}

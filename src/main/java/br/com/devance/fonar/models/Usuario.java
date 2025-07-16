@@ -1,5 +1,6 @@
 package br.com.devance.fonar.models;
 
+import br.com.devance.fonar.enums.PerfilUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -10,13 +11,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios_base")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
-public abstract class Usuario {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,62 +52,73 @@ public abstract class Usuario {
     @Column(name = "data_nascimento")
     private LocalDateTime dataNascimento;
 
-    public Usuario() {
-    }
+    @Column(name = "perfil_usuario")
+    private PerfilUsuario perfil;
 
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @Column(name = "ultimo_login")
+    private LocalDateTime ultimoLogin;
+
+    @Column(nullable = false)
+    private boolean ativo;
+
+    @Column(name = "tentativas_falhas")
+    private int tentativasFalhas;
+
+    @Column(name = "data_bloqueio")
+    private LocalDateTime dataBloqueio;
+
+    // Construtor explícito
     public Usuario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento){
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
         this.dataNascimento = dataNascimento;
+
+        // Inicializações padrão para os novos atributos que podem ser setados via construtor
+        this.dataCadastro = LocalDateTime.now();
+        this.ativo = true;
+        this.tentativasFalhas = 0;
+        this.ultimoLogin = null;
+        this.dataBloqueio = null;
+        this.perfil = null;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.perfil.name()));
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return this.senha;
     }
 
-    public String getNome() {
-        return nome;
+    @Override
+    public String getUsername() {
+        return this.cpf; // Usamos CPF como username de login
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getCpf() {
-        return cpf;
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.ativo;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public LocalDateTime getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDateTime dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    @Override
+    public boolean isEnabled() {
+        return this.ativo;
     }
 }
