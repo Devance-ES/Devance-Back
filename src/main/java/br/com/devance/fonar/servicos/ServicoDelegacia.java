@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -198,7 +199,7 @@ public class ServicoDelegacia {
             BeanUtils.copyProperties(dtoEntrada, delegado); // Copia nome, cpf, email, dataNascimento, contato
             delegado.setSenha(dtoEntrada.getSenha()); // Hasheia a senha
             delegado.setPerfil(PerfilUsuario.DELEGADO); // Define o perfil
-            delegado.setDataCadastro(LocalDate.now()); // Data de cadastro do Delegado
+            delegado.setDataCadastro(LocalDateTime.now()); // Data de cadastro do Delegado
             delegado.setDelegacia(delegacia); // Associa à delegacia
 
             Delegado delegadoSalvo = repositorioDelegado.save(delegado);

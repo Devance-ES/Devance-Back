@@ -15,8 +15,6 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    // A chave secreta para assinar e verificar o token.
-    // Ela será injetada do application.properties
     @Value("${app.security.jwt.secret}")
     private String secret;
 
@@ -55,6 +53,6 @@ public class TokenService {
 
     // Metodo auxiliar para gerar a data de expiração (ex: 2 horas a partir de agora)
     private Instant genExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")); // +2 horas, fuso horário de Brasília
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }

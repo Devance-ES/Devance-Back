@@ -1,39 +1,39 @@
 package br.com.devance.fonar.config;
 
-import br.com.devance.fonar.models.Usuario; // Para buscar o usuário
-
-import br.com.devance.fonar.repositorios.RepositorioUsuario; // Repositório para buscar o usuário
-
-import br.com.devance.fonar.servicos.TokenService; // Serviço para validar o token JWT
+import br.com.devance.fonar.repositorios.RepositorioUsuario;
+import br.com.devance.fonar.servicos.TokenService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken; // Para o token de autenticação
-import org.springframework.security.core.context.SecurityContextHolder; // Para o contexto de segurança
-import org.springframework.security.core.userdetails.UserDetails; // Para criar o UserDetails
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter; // Garante que o filtro seja executado uma vez por requisição
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component // Marca a classe como um componente Spring
+@Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService; // Serviço que vamos criar para gerar/validar o token
+    private TokenService tokenService;
 
     @Autowired
-    private RepositorioUsuario repositorioUsuario; // Para buscar o usuário no banco de dados
+    private RepositorioUsuario repositorioUsuario;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // Remova a lógica de if (requestURI.equals(...)) daqui
+        // O SecurityFilterChain já garante que este filtro não será executado para as rotas permitidas.
+
         String token = recoverToken(request); // Recupera o token da requisição
 
         if (token != null) {
-            String login = tokenService.validateToken(token); // Valida o token e retorna o login (CPF/Email)
+            String login = tokenService.validateToken(token); // Valida o token e retorna o login
             // Se o login for válido, carrega os detalhes do usuário
             UserDetails userDetails = repositorioUsuario.findByCpf(login)
                     .orElseGet(() -> repositorioUsuario.findByEmail(login)
@@ -45,10 +45,10 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        filterChain.doFilter(request, response); // Continua a cadeia de filtros
+        filterChain.doFilter(request, response);
     }
 
-    // Método auxiliar para recuperar o token do header da requisição
+    // Metodo auxiliar para recuperar o token do header da requisição
     private String recoverToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

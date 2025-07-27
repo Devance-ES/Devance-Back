@@ -37,7 +37,7 @@ public class ControladorDelegacia {
     }
 
     // UC-005: Cadastrar nova delegacia
-    @PostMapping // POST /api/v1/delegacias
+    @PostMapping ("/cadastro")
     public ResponseEntity<Delegacia> cadastrarNovaDelegacia(
             @RequestBody DTOEntradaDelegacia dtoEntrada,
             // O ID do executor viria do token JWT do usuário autenticado (Super Administrador)

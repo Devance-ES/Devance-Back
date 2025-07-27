@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,34 +28,21 @@ public class ServicoAutenticacao implements UserDetailsService {
     @Autowired
     private RepositorioUsuario repositorioUsuario;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Busca o usuário pelo CPF ou email
-        Usuario usuario = repositorioUsuario.findByCpf(username)
-                .orElseGet(() -> repositorioUsuario.findByEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username)));
-
-        if (!usuario.isAtivo()) {
-            throw new UsernameNotFoundException("Usuário inativo ou bloqueado: " + username);
-        }
-
-        // Atualiza o último login
-        usuario.setUltimoLogin(LocalDateTime.now());
-        repositorioUsuario.save(usuario);
-
-        // Retorna um objeto UserDetails que o Spring Security usará
-        // A senha retornada aqui (usuario.getSenha()) será comparada pelo PasswordEncoder
-        // O perfil (role) é obtido diretamente do atributo 'perfil' da entidade Usuario
-        return User.withUsername(usuario.getCpf())
-                .password(usuario.getSenha())
-                .roles(usuario.getPerfil().name())
-                .build();
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        // O metodo findByCpf ou findByEmail deve retornar um Optional<Usuario>.
+        // Como Usuario implementa UserDetails, você pode retornar a própria instância de Usuario.
+        return repositorioUsuario.findByCpf(login)
+                .orElseGet(() -> repositorioUsuario.findByEmail(login)
+                        .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + login)));
     }
 
-    // Metodo para registrar um novo usuário (Delegado, Funcionário, Vítima)
+    // Metodo para registrar um novo usuário
     @Transactional
     public Usuario registrarUsuario(DTOCadastroUsuario dtoCadastro) {
-        // Validação de unicidade de CPF e Email
         if (repositorioUsuario.existsByCpf(dtoCadastro.getCpf())) {
             throw new IllegalArgumentException("Já existe um usuário com este CPF.");
         }
@@ -78,7 +66,7 @@ public class ServicoAutenticacao implements UserDetailsService {
         // Copiar propriedades comuns (nome, cpf, email, dataNascimento)
         BeanUtils.copyProperties(dtoCadastro, novoUsuario, "senha"); // Copia tudo menos a senha (que será hasheada)
 
-        novoUsuario.setSenha(dtoCadastro.getSenha());
+        novoUsuario.setSenha(passwordEncoder.encode(dtoCadastro.getSenha()));
 
         // Definir o perfil diretamente (já que o atributo está na classe Usuario)
         novoUsuario.setPerfil(dtoCadastro.getPerfil());

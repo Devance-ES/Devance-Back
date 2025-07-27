@@ -27,12 +27,6 @@ public class ControladorFonar {
         return ResponseEntity.ok(mensagem);
     }
 
-    @PostMapping("/test/saveRandomData") // TODO: apagar depois
-    public ResponseEntity<String> salvarDadosAleatorios() {
-        servicoFonar.salvarDadosAleatorios();
-        return ResponseEntity.ok("Dados aleatórios salvos com sucesso.");
-    }
-
     @GetMapping("/historico/vitima/{cpf}")
     public ResponseEntity<List<DTOHistoricoFonar>> obterHistoricoFonarVitima(
             @PathVariable String cpf,

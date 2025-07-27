@@ -1,19 +1,22 @@
-package br.com.devance.fonar.dto; // Ou br.com.devance.fonar.dto, se preferir
+// src/main/java/br/com/devance/fonar/dtos/DTOAuthResponse.java
+package br.com.devance.fonar.dto;
 
-import br.com.devance.fonar.enums.PerfilUsuario;
+import br.com.devance.fonar.enums.PerfilUsuario; // Certifique-se de importar PerfilUsuario
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // Gera getters, setters, toString, equals e hashCode
-@NoArgsConstructor // Gera construtor sem argumentos
-@AllArgsConstructor // Gera construtor com todos os argumentos
-@Builder // Gera o padrão Builder
-public class DTOAuthResponse { // Classe renomeada para DTOAuthResponse
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class DTOAuthResponse {
     private String token;
     private Long userId;
-    private String cpf; // Ou username principal
+    private String cpf;
     private PerfilUsuario perfil;
     private String message;
+
 }
+

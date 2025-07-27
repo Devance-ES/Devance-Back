@@ -1,5 +1,6 @@
 package br.com.devance.fonar.models;
 
+import br.com.devance.fonar.enums.PerfilUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -22,8 +23,9 @@ public class SuperAdministrador extends Usuario{
         this.responsavelPor = new ArrayList<>();
     }
 
-    public SuperAdministrador(String nome, String cpf, String email, String senha, LocalDateTime nascimento, String contato){
-        super (nome,cpf,email, senha, nascimento);
+    public SuperAdministrador(String nome, String cpf, String email, String senha, LocalDateTime nascimento,
+                              String contato, PerfilUsuario perfil){
+        super (nome,cpf,email, senha, nascimento, perfil);
         this.contato = contato;
         this.responsavelPor = new ArrayList<>();
     }

@@ -1,16 +1,7 @@
 package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.PerfilUsuario;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +44,7 @@ public abstract class Usuario implements UserDetails {
     private LocalDateTime dataNascimento;
 
     @Column(name = "perfil_usuario")
+    @Enumerated(EnumType.STRING)
     private PerfilUsuario perfil;
 
     @Column(name = "data_cadastro")
@@ -71,7 +63,7 @@ public abstract class Usuario implements UserDetails {
     private LocalDateTime dataBloqueio;
 
     // Construtor explícito
-    public Usuario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento){
+    public Usuario(String nome, String cpf, String email, String senha, LocalDateTime dataNascimento, PerfilUsuario perfil){
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -84,7 +76,7 @@ public abstract class Usuario implements UserDetails {
         this.tentativasFalhas = 0;
         this.ultimoLogin = null;
         this.dataBloqueio = null;
-        this.perfil = null;
+        this.perfil = perfil;
     }
 
     @Override
