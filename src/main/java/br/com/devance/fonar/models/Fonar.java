@@ -41,7 +41,7 @@ public class Fonar {
     @Setter
     @Getter
     @ManyToOne
-    @JoinColumn(name = "delegacia_id", nullable = false)
+    @JoinColumn(name = "delegacia_id", nullable = true)
     private Delegacia delegacia;
 
     @Setter

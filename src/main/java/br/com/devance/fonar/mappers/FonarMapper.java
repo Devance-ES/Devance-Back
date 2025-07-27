@@ -50,14 +50,17 @@ public class FonarMapper {
             return null;
         }
 
+        String nomeDelegacia = (entity.getDelegacia() != null) ? entity.getDelegacia().getNome() : null;
+        String responsavelRegistro = entity.getResponsavel();
+
         return DTOSaidaFonar.builder()
                 .idFonar(entity.getIdFonar())
                 .cpfVitima(entity.getCpfVitima())
-                .nomeDelegacia(entity.getDelegacia().getNome())
+                .nomeDelegacia(nomeDelegacia) // Usando o nomeDelegacia tratado
                 .dataRegistro(entity.getDataRegistro())
-                .responsavel(entity.getResponsavel())
+                .responsavel(responsavelRegistro) // Usando o responsável tratado
                 .grauDeRiscoCalculado(entity.getGrauDeRiscoCalculado())
-                .statusTriagem((Status) entity.getStatusTriagem())
+                .statusTriagem((Status) entity.getStatusTriagem()) // Cast para Status não é necessário se statusTriagem já for Status
                 .build();
     }
 }

@@ -47,9 +47,9 @@ public class ControladorFonar {
 
     // UC01, UC02, UC03: Acessar, Preencher, Revisar e Enviar o FONAR (Vítima)
     @PostMapping("/publico")
-    public ResponseEntity<DTOSaidaFonar> registrarFonarPublico(@RequestBody DTOEntradaFonar dtoEntradaFonar) {
+    public ResponseEntity<String> registrarFonarPublico(@RequestBody DTOEntradaFonar dtoEntradaFonar) {
         DTOSaidaFonar dto = servicoFonar.registrarFonarOnline(dtoEntradaFonar);
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto.toString());
     }
 
     // UC16: Registrar Novo FONAR (para Delegados e Funcionários)
