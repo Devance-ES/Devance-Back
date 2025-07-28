@@ -40,12 +40,19 @@ public class ConfiguracaoSeguranca {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/fonar/publico").permitAll()
-                        // Outros endpoints protegidos por autenticação
-                        .anyRequest().authenticated() // Qualquer outra requisição DEVE ser autenticada
+                        .requestMatchers(HttpMethod.POST, "/error").permitAll()// Se ainda estiver temporário
+                        .requestMatchers(HttpMethod.POST, "/api/delegacias").hasRole("SUPER_ADMIN") // Criar delegacia
+                        // Permite que SUPER_ADMIN e DELEGADO cadastrem funcionários secundários
+                        .requestMatchers(HttpMethod.POST, "/api/delegacias/{id}/funcionarios").hasAnyRole("SUPER_ADMIN", "DELEGADO")
+
+                        // Endpoints do ControladorUsuario
+                        .requestMatchers(HttpMethod.GET, "/usuarios").hasRole("SUPER_ADMIN") // Listar todos
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").hasAnyRole("SUPER_ADMIN", "DELEGADO", "FUNCIONARIO_SECUNDARIO") // Obter por ID (Delegado e Funcionário podem ver detalhes de si mesmos ou outros, dependendo da regra de negócio mais granular)
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("SUPER_ADMIN") // Atualizar (apenas SUPER_ADMIN por enquanto)
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("SUPER_ADMIN") // Deletar (apenas SUPER_ADMIN)
+
+                        .anyRequest().authenticated()
                 )
-                // Adiciona nosso filtro JWT SOMENTE para as requisições que NÃO são públicas
-                // Ao fazer isso, o SecurityFilter não será executado para /auth/login,
-                // permitindo que o UsernamePasswordAuthenticationFilter (padrão) lide com ele.
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

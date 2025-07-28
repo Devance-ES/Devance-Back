@@ -6,6 +6,7 @@ import br.com.devance.fonar.dto.DTOAuthRequest;
 import br.com.devance.fonar.dto.DTOAuthResponse;
 import br.com.devance.fonar.models.Delegado;
 import br.com.devance.fonar.models.FuncionarioSecundario;
+import br.com.devance.fonar.models.SuperAdministrador;
 import br.com.devance.fonar.models.Usuario;
 import br.com.devance.fonar.repositorios.RepositorioUsuario;
 import br.com.devance.fonar.servicos.ServicoAutenticacao;
@@ -113,6 +114,11 @@ public class ControladorAutenticacao {
                 novoUsuario = new FuncionarioSecundario(dados.getNome(), dados.getCpf(), dados.getEmail(),
                         senhaCriptografada, dados.getDataNascimento(), dados.getPerfil(), null,  null);
                 break;
+            case SUPER_ADMIN:
+                novoUsuario = new SuperAdministrador(dados.getNome(), dados.getCpf(), dados.getEmail(),
+                        senhaCriptografada, dados.getDataNascimento(), "",   dados.getPerfil());
+                break;
+
             default:
                 return ResponseEntity.badRequest().body("Perfil de usuário inválido.");
         }

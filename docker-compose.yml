@@ -51,6 +51,7 @@ services:
       DATABASE_URL: jdbc:postgresql://db:5432/fonar_db
       DATABASE_USERNAME: fonar_user
       DATABASE_PASSWORD: fonar_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       # spring.devtools.restart.enabled: false
       # logging.level.org.springframework: DEBUG
       # logging.level.org.hibernate: DEBUG
