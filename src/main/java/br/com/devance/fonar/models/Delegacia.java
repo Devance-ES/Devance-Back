@@ -2,10 +2,16 @@ package br.com.devance.fonar.models;
 
 import br.com.devance.fonar.enums.StatusDelegacia;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "delegacias")
 public class Delegacia {
@@ -21,7 +27,7 @@ public class Delegacia {
     private String cnpj;
 
     @Column(name = "endereco", nullable = false, length = 500)
-    private String endereço;
+    private String endereco;
 
     @Column(nullable = false, length = 255)
     private String senha;
@@ -29,8 +35,9 @@ public class Delegacia {
     @Column(name = "informacao_contato", length = 255)
     private String informacaoContato;
 
-    @OneToMany(mappedBy = "delegacia")
-    private List<Delegado> responsavel;
+    @ManyToOne // Uma delegacia tem UM Delegado responsável
+    @JoinColumn(name = "delegado_responsavel_id") // Coluna FK na tabela delegacias
+    private Delegado delegadoResponsavel; // O objeto Delegado responsável
 
     @Column(name = "status")
     private StatusDelegacia status;
@@ -44,126 +51,6 @@ public class Delegacia {
 
     @Column
     private StatusDelegacia statusDelegacia;
-
-    public Delegacia() {
-    }
-
-    public Delegacia(String nome, String cnpj, String endereço, String senha, String contato) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.endereço = endereço;
-        this.senha = senha;
-        this.informacaoContato = contato;
-        this.responsavel = new ArrayList<>();
-    }
-
-    public Delegacia(String nome, String cnpj, String endereço, String senha, String informacaoContato,
-            List<Delegado> responsavel, SuperAdministrador superAdministradorGerenciador,
-            StatusDelegacia statusDelegacia) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.endereço = endereço;
-        this.senha = senha;
-        this.informacaoContato = informacaoContato;
-        this.responsavel = responsavel;
-        this.superAdministradorGerenciador = superAdministradorGerenciador;
-        this.statusDelegacia = statusDelegacia;
-    }
-
-    public Delegacia(String nome, String cnpj, String endereço, String senha, String informacaoContato,
-            List<Delegado> responsavel, StatusDelegacia status, String tipo,
-            SuperAdministrador superAdministradorGerenciador, StatusDelegacia statusDelegacia) {
-        this.nome = nome;
-        this.cnpj = cnpj;
-        this.endereço = endereço;
-        this.senha = senha;
-        this.informacaoContato = informacaoContato;
-        this.responsavel = responsavel;
-        this.status = status;
-        this.tipo = tipo;
-        this.superAdministradorGerenciador = superAdministradorGerenciador;
-        this.statusDelegacia = statusDelegacia;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public StatusDelegacia getStatusDelegacia() {
-        return statusDelegacia;
-    }
-
-    public void setStatusDelegacia(StatusDelegacia statusDelegacia) {
-        this.statusDelegacia = statusDelegacia;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public String getEndereço() {
-        return endereço;
-    }
-
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getInformacaoContato() {
-        return informacaoContato;
-    }
-
-    public void setInformacaoContato(String informacaoContato) {
-        this.informacaoContato = informacaoContato;
-    }
-
-    public List<Delegado> getResponsavel() {
-        return responsavel;
-    }
-
-    public void setResponsavel(List<Delegado> responsavel) {
-        this.responsavel = responsavel;
-    }
-
-    public SuperAdministrador getSuperAdministradorGerenciador() {
-        return superAdministradorGerenciador;
-    }
-
-    public void setSuperAdministradorGerenciador(SuperAdministrador superAdministradorGerenciador) {
-        this.superAdministradorGerenciador = superAdministradorGerenciador;
-    }
 
     public StatusDelegacia getStatus() {
         return statusDelegacia;

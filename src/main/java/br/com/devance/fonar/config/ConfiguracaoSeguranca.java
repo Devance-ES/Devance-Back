@@ -51,6 +51,9 @@ public class ConfiguracaoSeguranca {
                         .requestMatchers(HttpMethod.PUT, "/usuarios/{id}").hasRole("SUPER_ADMIN") // Atualizar (apenas SUPER_ADMIN por enquanto)
                         .requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("SUPER_ADMIN") // Deletar (apenas SUPER_ADMIN)
 
+                        // Endpoints Upload OCR
+                        .requestMatchers(HttpMethod.DELETE, "/api/fonars/ocr-upload").hasRole("SUPER_ADMIN") // Deletar (apenas SUPER_ADMIN)
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

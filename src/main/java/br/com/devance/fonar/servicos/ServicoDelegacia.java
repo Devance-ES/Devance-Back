@@ -16,6 +16,7 @@ import br.com.devance.fonar.repositorios.RepositorioDelegacia;
 import br.com.devance.fonar.repositorios.RepositorioDelegado;
 import br.com.devance.fonar.repositorios.RepositorioFuncionarioSecundario;
 
+import br.com.devance.fonar.repositorios.RepositorioUsuario;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class ServicoDelegacia {
     private RepositorioDelegado repositorioDelegado;
 
     @Autowired
+    private RepositorioUsuario repositorioUsuario;
+
+    @Autowired
     private RepositorioFuncionarioSecundario repositorioFuncionarioSecundario;
 
     // @Autowired private ServicoAuditoria servicoAuditoria; // Temporariamente fora de uso
@@ -58,7 +62,7 @@ public class ServicoDelegacia {
 
         Delegado delegadoResponsavel = null;
         if (dtoEntrada.getIdResponsavel() != null) {
-            delegadoResponsavel = (Delegado) repositorioDelegado.findById(dtoEntrada.getIdResponsavel())
+            delegadoResponsavel = (Delegado) repositorioUsuario.findById(dtoEntrada.getIdResponsavel())
                     .orElseThrow(() -> new ExcecaoRecursoNaoEncontrado("Delegado responsável não encontrado."));
         }
 

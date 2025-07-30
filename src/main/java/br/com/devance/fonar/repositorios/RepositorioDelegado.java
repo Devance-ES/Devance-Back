@@ -13,15 +13,15 @@ import java.util.Optional;
 @Repository
 public interface RepositorioDelegado extends JpaRepository<Delegado, Long>, JpaSpecificationExecutor<Delegado> {
 
-    // Método para buscar um Delegado por CPF (UC: Autenticação, Cadastro/Busca)
+    // Metodo para buscar um Delegado por CPF (UC: Autenticação, Cadastro/Busca)
     Optional<Delegado> findByCpf(String cpf);
 
-    // Método para verificar a existência de um Delegado por CPF (UC: Cadastro para evitar duplicidade)
+    // Metodo para verificar a existência de um Delegado por CPF (UC: Cadastro para evitar duplicidade)
     boolean existsByCpf(String cpf);
 
-    // Método para buscar Delegados por Delegacia (UC: Obter Delegados de uma Delegacia)
+    // Metodo para buscar Delegados por Delegacia (UC: Obter Delegados de uma Delegacia)
     List<Delegado> findByDelegacia(Delegacia delegacia);
 
-    // Método para buscar Delegado por e-mail (UC: Autenticação, Busca)
+    // Metodo para buscar Delegado por e-mail (UC: Autenticação, Busca)
     Optional<Delegado> findByEmail(String email);
 }
