@@ -67,4 +67,8 @@ public class Delegacia {
     public void removerDelegado(Delegado delegado) {
 
     }
+
+    public String getNome() {
+        return nome;
+    }
 }

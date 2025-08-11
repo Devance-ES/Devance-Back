@@ -37,6 +37,6 @@ public class FuncionarioSecundario extends Usuario{
     }
 
     public FuncionarioSecundario() {
-
+        super();
     }
 }

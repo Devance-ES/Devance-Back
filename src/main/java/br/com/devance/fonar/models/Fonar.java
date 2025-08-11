@@ -103,6 +103,10 @@ public class Fonar {
     @Setter
     private Long version;
 
+    // NOVOS ATRIBUTOS PARA AVALIAÇÃO DE RISCO
+    private String risco;
+    private Double pontuacaoRisco;
+
     public Fonar() {
         this.dataRegistro = LocalDate.now();
     }
@@ -111,8 +115,80 @@ public class Fonar {
         return statusTriagem;
     }
 
+    public String getCpfVitima() {
+        return cpfVitima;
+    }
+
+    // Métodos getters e setters para os novos atributos
+    public String getRisco() {
+        return risco;
+    }
+
+    public void setRisco(String risco) {
+        this.risco = risco;
+    }
+
+    public Double getPontuacaoRisco() {
+        return pontuacaoRisco;
+    }
+
+    public void setPontuacaoRisco(Double pontuacaoRisco) {
+        this.pontuacaoRisco = pontuacaoRisco;
+    }
+
+    public String getResponsavel() {
+        return responsavel;
+    }
+
+    public IdentificacaoPartesFONAR getIdentificacaoPartes() {
+        return identificacaoPartes;
+    }
+
+    public HistoricoViolenciaFONAR getBlocoI_HistoricoViolencia() {
+        return blocoI_HistoricoViolencia;
+    }
+
+    public SobreAgressorFONAR getBlocoII_SobreAgressor() {
+        return blocoII_SobreAgressor;
+    }
+
+    public SobreVitimaFONAR getBlocoIII_SobreVitima() {
+        return blocoIII_SobreVitima;
+    }
+
+    public OutrasInformacoesFONAR getBlocoIV_OutrasInformacoes() {
+        return blocoIV_OutrasInformacoes;
+    }
+
+    public PreenchimentoProfissionalFONAR getPreenchimentoProfissional() {
+        return preenchimentoProfissional;
+    }
+
+    public String getCaminhoImagemOriginal() {
+        return caminhoImagemOriginal;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
     public void setStatusTriagem(Enum<Status> statusTriagem) {
         this.statusTriagem = (Status) statusTriagem;
     }
 
+    public Delegacia getDelegacia() {
+        return delegacia;
+    }
+
+    public LocalDate getDataRegistro() {
+        return dataRegistro;
+    }
+
+    public String getGrauDeRiscoCalculado() {
+        return grauDeRiscoCalculado;
+    }
+
+    public UUID getIdFonar() {
+        return idFonar;
+    }
 }

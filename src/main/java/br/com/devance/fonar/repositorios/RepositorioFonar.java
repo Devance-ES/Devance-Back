@@ -16,4 +16,7 @@ public interface RepositorioFonar extends JpaRepository<Fonar, UUID>, JpaSpecifi
     List<Fonar> findByCpfVitima(String cpfVitima);
 
     Optional<Fonar> findByIdFonarAndCpfVitima(UUID idFonar, String cpfVitima);
+
+    List<Fonar> findByBlocoII_SobreAgressor_CpfAgressor(String cpfAgressor); //ANTONIO
+
 }
